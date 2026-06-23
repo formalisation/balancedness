@@ -1,0 +1,157 @@
+\section{The Kempf-Ness theorem and the DLN}
+\label{sec:kempf-ness}
+\subsection{Overview}
+We first review the abstract framework of the Kempf-Ness theorem. The proof of Theorem~\ref{thm:intro} reduces to a verification of the hypotheses of this theorem. We then discuss a more general class of minimization principles covered by 
+the Azad-Loeb theorem. At present, our results do {\em not\/} include $L^1$-regularization (though see Theorem~\ref{thm:intro-revised} below).
+
+
+\subsection{The Kempf-Ness theorem: abstract structure}
+We summarize the abstract setup  following Helmke~\cite[\S 2]{Helmke}. The reader is also referred to~\cite{Ness} for finer results based on the gradient flow of the squared moment map. 
+
+We assume given a complex reductive Lie group $\Ggroup$ with maximal compact subgroup $\Kgroup$ and a finite-dimensional complex vector space $V$. Examples are $\Ggroup =\GLdC$, $\Kgroup = U_d$ and $V = \C^d$. Let 
+\begin{equation}
+\label{eq:kn1}
+\alpha: \Ggroup \times  V \to V
+\end{equation}
+denote a linear algebraic action of $\Ggroup$ on $V$. The orbit of a point $x \in V$ under the $\Ggroup$ action is the subset of $V$ given by
+\begin{equation}
+\label{eq:kn2}
+\groupx  = \{g\cdot x \left| g \in \Ggroup\right. \}.    
+\end{equation}
+The stabilizer subgroup $\stabx$ is the subgroup of $\Ggroup$ that fixes $x$. That is, 
+\begin{equation}
+\label{eq:kn3}
+\stabx  = \{g \in \Ggroup  \left| g\cdot x= x\right. \}.    
+\end{equation}
+On general grounds, the orbit $\groupx$ is a complex manifold that is biholomorphically equivalent to the symmetric space $\Ggroup/\stabx$. 
+
+The Kempf-Ness theory studies the critical points of $\Kgroup$-invariant functions on $\groupx$. A function $\varphi: \groupx \to \C$ is $\Kgroup$-invariant if 
+\[ \varphi(k\cdot y) = \varphi (y), \quad y \in \groupx, k \in \Kgroup.\]
+A typical example of a $\Kgroup$-invariant function is a $\Kgroup$-invariant norm $\|\cdot \|$ on $V$. In particular, we may consider norms defined by a Hermitian inner-product $\langle \cdot, \cdot \rangle$. The norm is $\Kgroup$-invariant when 
+\[ \langle k\cdot u, k \cdot v \rangle = \langle u, v \rangle, \quad k \in \Kgroup, \quad u,v \in V.\]
+
+For any such norm, we consider the distance functions $\groupx \to \R$, $y \mapsto \|y\|^2$. Since $\groupx$ is a group orbit, we may also view this as a function 
+\begin{equation}
+    \label{eq:def-psi}
+    \psi_x:\Ggroup \to \R, \quad g \mapsto \|g\cdot x\|^2. 
+\end{equation}
+The function $\psi_x$ is a $\Kgroup$-invariant function on $\Ggroup$. Let $e \in \Ggroup$ denote the identity. The derivative of $\psi_x$ at $e$ is computed as follows. Consider an element $a \in \Galgebra$ and the one-parameter subgroup $e^{\tau a} \in \Ggroup$, $\tau \in \R$. Then 
+\begin{equation}
+    \label{eq:def-psi2}
+    d\psi_x(e)(a) = \left. \frac{d}{d\tau} \psi_x(e^{\tau a})\right|_{\tau=0}.
+\end{equation}
+Thus, $d\psi_x \in \Galgebra^*$ and vanishes when $a \in \Kalgebra$, the Lie algebra of $\Kgroup$.
+
+\begin{defn}
+The moment map $\moment$ is the function
+\begin{equation}
+    \label{eq:def-psi3}
+    \moment: V \to \Galgebra^*/\Kalgebra^*, \quad x \mapsto d\psi_x(e).
+\end{equation}
+\end{defn}
+
+%This map is $\Kgroup$-equivariant and its image is a coadjoint orbit in $\Galgebra^*/\Kalgebra^*$. 
+%On general grounds, this image is a symplectic manifold.
+
+We now state the Kempf-Ness theorem(s), making modest stylistic changes from the versions stated in~\cite{Helmke,Kempf}.
+\begin{theorem}[Kempf-Ness]
+\label{thm:kn1}
+Assume given a linear algebraic action  $\alpha: \Ggroup \times V$ of a complex reductive group $\Ggroup$ on a finite-dimensional vector space $V$ and  a $\Kgroup$-invariant Hermitian norm on $V$. The following are equivalent:
+\begin{enumerate}
+    \item $\psi_x$ has a critical point on $\Ggroup$.
+    \item $\psi_x$ has a minimum on $\Ggroup$.
+    \item The orbit $\groupx$ is closed.
+\end{enumerate}
+\end{theorem}
+\begin{theorem}[Kempf-Ness]
+\label{thm:kn2}
+Assume the hypotheses of Theorem~\ref{thm:kn1} and assume that $\groupx$ is closed. Then
+\begin{enumerate}
+    \item Every critical point of $\psi_x$ is a global minimum and the set of global minima is a unique $\Kgroup$-orbit.
+    \item The Hessian of $\psi_x$ is positive semi-definite at each critical point on the $\Kgroup$-orbit, degenerating only in the directions tangent to the $\Kgroup$-orbit.
+\end{enumerate}
+\end{theorem}
+\begin{remark}
+ The Kempf-Ness theorem has been extended to real groups and vector spaces by Slodowy~\cite{Slodowy}. We do not state this theorem separately but we use it below.
+\end{remark}
+\begin{remark}
+The reader may gain some intuitive insight into these theorems by considering Figure~\ref{fig:dln} and Figure~\ref{fig:reg-flow}. The group $\Ggroup$ here is the group of positive real numbers with the group action being $(w_2,w_1) \mapsto (w_2 A^{-1},Aw_1)$, $A \in \R_+$. The orbits that are not closed in Figure~\ref{fig:dln} are the semi-axes within the singular variety $w_2w_1=0$ (that is, either $w_1=0$ or $w_2=0$, but not both). %This example should make the relation between topological closure and norm minimization transparent. Nevertheless, a glance at Figure~\ref{fig:reg-flow} should also reveal that in higher dimensions a more careful accounting of the group actions is necessary for any such conclusion to hold.
+\end{remark}
+\begin{remark}
+Ness used the gradient flow of $\|\moment\|^2$ to classify the non-closed orbits, further stratifying them according to the minimal and non-minimal critical points of $\|\moment\|^2$~\cite[Thm 6.2]{Ness}). This analysis motivated our introduction of the Kirwan-Ness flow in Section~\ref{sec:ness}.
+\end{remark}
+
+\subsection{Application of the Kempf-Ness theorem}
+\begin{proof}[Proof of Theorem~\ref{thm:intro}]
+We first note the equivalence between the assumptions of the Kempf-Ness theorem and group actions in the DLN. The vector space $V$ is $\Md^N(\C)$, the group $\Ggroup$ is $\GLdC^{N-1}$, the subgroup $\Kgroup$ is $U_d^{N-1}$ and the group action $\alpha: \Ggroup \times V \to V$ is the group action $\ww \mapsto \bfA \cdot \ww$ stated in equation~\eqref{eq:group-action1}. The norm $\|\ww\|_2^2$ is clearly $U_d^{N-1}$ invariant.
+Thus, the groups, group action and norm satisfy the hypotheses of the Kempf-Ness theorem.
+
+A somewhat more subtle hypothesis to verify is whether the fibers $\fiberX$ defined by the polynomial equation $W_N\cdot W_1 =X$ are indeed group orbits. When $X$ has full rank, Lemma~\ref{le:group-orbit} shows that $\fiberX$ is of the form $\Ggroup_x$ in the setup of the Kempf-Ness theorem. Thus, Theorem~\ref{thm:intro} follows for complex matrices. 
+
+Similarly, we may also consider the vector space $\Md^N(\R)$, the group $\GLdR^{N-1}$, the subgroup $O_d^{N-1}$ and the group action $\ww \mapsto \bfA \cdot \ww$ as in equation~\eqref{eq:group-action1}. The norm $\|\ww\|_2^2$ is now $O_d^{N-1}$ invariant.
+Thus, for the real DLN the groups, group action and norm satisfy the hypotheses of Slodowy's extension of the Kempf-Ness theorem. Again, the fiber $\fiberX$ is a group orbit when $X$ has full-rank. Thus, Theorem~\ref{thm:intro} holds for the real DLN.
+\end{proof}
+\begin{remark}
+The moment map for the DLN follows from equations~\eqref{eq:def-psi}--~\eqref{eq:def-psi3} and Lemma~\ref{le:moments}. We find that 
+\begin{equation}
+    \label{eq:moment-DLN}
+    \mu(\ww) = \bfG(\ww).
+\end{equation}
+%(This explains the factor of $2$ in several calculations, such as the proof of Lemma~\ref{le:grad}).
+
+The importance of working over $\Md^N(\C)$ first is that a moment map must be defined on a symplectic manifold. While both Theorem~\ref{thm:intro} and Theorem~\ref{thm:reg-flow} hold for $\Md^N(\R)$, the fiber $\fiberX$ is not in general a symplectic manifold for real matrices (it may not even be even-dimensional).
+\end{remark}
+
+\subsection{Hidden convexity}
+\label{subsec:convexity}
+The Kempf-Ness theorem may be seen as an assertion that the squared norm function $\psi_x: \Ggroup\to \R$ has properties analogous to a convex function. In fact, the proof of the theorem begins with a consideration of `special functions' on the line of the form  $\sum_{i=1}a_ e^{l_i x}$ where $a_i$ are positive numbers and the $l_i$ are arbitrary real numbers~\cite[\S 1]{Kempf}. Azad and Loeb noticed that the key feature of the squared norm function that is relevant to the Kempf-Ness theorem is its plurisubharmonicity, yielding the following 
+\begin{theorem}[Azad-Loeb~\cite{Azad-Loeb}]
+\label{thm:azad}
+Assume given a complex reductive group $\Ggroup$ and a maximal compact subgroup $\Kgroup$. Let $\Hgroup$ be a closed complex subgroup of $\Ggroup$ and $\varphi:\Ggroup/\Hgroup \to \C$ a strictly plurisubharmonic function. If the critical point set of $\varphi$ is non-empty then it is a $\Kgroup$-orbit and $\varphi$ achieves its global minimum on this orbit.
+\end{theorem}
+This theorem allows us to expand the class of minimization principles as in Theorem~\ref{thm:intro}. The main idea is that plurisubharmonic functions may be easily constructed from holomorphic functions using convexity. For example, if $f: \Md^N(\C) \to \C$ is holomorphic, then $\log|f|$ is plurisubharmonic. Similarly, any norm on $\Md(\C)$ is plurisubharmonic. In particular, since we may define a norm on $\Md^N(\C)$ by summing over the Schatten $p$-norms
+\begin{equation}
+    \label{eq:schatten}
+    \|\ww\|_{p} := \sum_{k=1}^N \|W_k \|_p, 
+\end{equation}
+we obtain a strictly plurisubharmonic function on $\Md^N(\C)$, and thus by restriction, strictly plurisubharmonic functions on $\groupx$ when $1<p<\infty$. 
+Theorem~\ref{thm:azad} then implies the following general regularization principle.
+\begin{theorem}
+\label{thm:intro-revised} Assume $X$ has full rank and $1<p<\infty$. Then
+\begin{equation}
+\label{eq:variation2} \argmin_{\ww \in \fiberX} \|\ww\|_p= \fiberX \cap \balance.
+\end{equation}   
+\end{theorem}
+These generalizations are not entirely satisfactory. In practice, it is the $L^2$ (ridge) and $L^1$ (lasso) regularization that matter the most. While the function $\|\ww\|_1$ is plurisubharmonic  on $\groupx$, it is not {\em strictly\/} plurisubharmonic. This leaves open interesting possibilities; for example, the set or critical points for the $L^1$-regularizer may not be a $U_d^{N-1}$-orbit. It is also of interest to study the related gradient flows.
+
+
+
+
+\endinput
+\subsection{Open questions}
+
+
+
+\begin{remark}
+A complete characterization of the fibers $\groupx$ as group orbits for lower-rank matrices eludes us at present. We note however that the moment map $\ww \to \Her_d^{N-1}$ depends smoothly on $\ww$. Since full-rank matrices form an open and dense set in $\Md^N$, Theorem~\ref{thm:reg-flow} suggests by approximation that $\bfG(t)= \bfG(0)e^{-4t}$ for all $\bfG \in \Her_d^{N-1}$ for all initial conditions $\ww(0)$.
+\end{remark}
+
+The two most important of these are: 
+\begin{enumerate}
+    \item  The computation of the nullcone for the DLN and an extension of Theorem~\ref{thm:intro} and Theorem~\ref{thm:reg-flow} to provide a stratification for the gradient flow (i.e. a relaxation of the assumption that $X$ has full rank).
+    \item The analysis of $L^1$-regularization in analogy with the results in this paper.
+\end{enumerate} 
+
+
+
+
+
+\endinput
+
+
+
+\subsection{Remarks on the use of complex valued matrices}
+\begin{remark}
+We have used the conjugate transpose $*$ in order to deal simultaneously with the DLN corresponding to matrices with real, complex and quaternionic entries. While the real case is most common (e.g. in ~\cite{ACH,Bah,MY-dln}), the mathematical structure is most transparent for complex matrices, since we use tools from algebraic geometry. The entropy formula in~\cite{MY-dln} holds in all these cases, in analogy with the $\beta=1$, $2$ and $4$ cases in random matrix theory~\cite{Montero-Nahas}.
+\end{remark}
+

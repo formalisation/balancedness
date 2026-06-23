@@ -1,0 +1,18 @@
+# Rename `Project` throughout this template to your project name (this file,
+# the root `Project.lean`, the `Project/` directory, the namespace, and the LIB
+# var in scripts/no_sorry.sh). Keep the Mathlib `rev` in sync with lean-toolchain.
+name = "Project"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["Project"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.31.0"
+
+[[lean_lib]]
+name = "Project"

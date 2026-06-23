@@ -1,0 +1,20 @@
+# Local build/cache artifacts.
+/.lake/
+/.venv/
+/.env
+.DS_Store
+__pycache__/
+*.pyc
+
+# Large local background source and generated extracts.
+/papers/\[Universitext\] Wallach, Nolan R - Geometric invariant theory. Over the real and complex numbers (2017, Springer Nature) - libgen.li.pdf
+/papers/wallach-git-section-*.tex
+/papers/wallach-git-section-*/
+
+# Generated Aristotle submissions and outputs.
+/aristotle/aristotle-in/*.lean
+/aristotle/aristotle-in/**/*.lean
+/aristotle/aristotle-out/*.lean
+/aristotle/aristotle-out/**/*.lean
+/aristotle/aristotle-out/*.zip
+/aristotle/aristotle-out/*.tar.gz

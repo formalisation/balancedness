@@ -1,0 +1,299 @@
+\section{Regularizing flows}
+\label{sec:reg-flow}
+%Theorem~\ref{thm:intro} and Theorem~\ref{thm:reg-flow} are closely related, but rely on different techniques. Theorem~\ref{thm:reg-flow} relies on Riemannian geometry; on the other hand, Theorem~\ref{thm:intro} relies on algebraic and symplectic geometry.
+
+In this section, we develop the Riemannian geometry of $\fiberX$, compute the gradient $\grad \|\ww\|^2$ and prove Theorem~\ref{thm:reg-flow}. We emphasize concrete matrix computations. In the next section, we place these computations within the abstract conception of the Kempf-Ness theorem to establish Theorem~\ref{thm:intro}. All calculations are performed under the assumption that $\mathbb{F}=\C$. The case $\mathbb{F}=\R$ follows naturally. 
+
+%The proof of Theorem~\ref{thm:intro} reduces to an application of the Kempf-Ness theorem. 
+
+%In this section we emphasize the underlying Riemannian geometry.
+%approach this theorem with first present the main computations as a series of Lemmas. 
+
+%We then place these calculations within the general framework of the Kempf-Ness theorem. 
+
+\subsection{$\fiberX$ is a $\GLdC^{N-1}$ orbit}
+%Assume $X$ has full rank. Then since $X= W_N \cdots W_1$, each $\ww \in \fiberX$ consists of matrices $(W_N,\ldots,W_1)$ with full rank. 
+The assumption that $X$ has full rank allows us to characterize $\fiberX$ as a group orbit.
+\begin{lemma}
+\label{le:group-orbit}
+Assume $X$ has full rank. The point $\ww \in \fiberX$ if and only if it is of the form $\bfA \cdot \bfC$ for some $\bfA\in \GLdC^{N-1}$.
+\end{lemma}
+\begin{proof}
+Let $X=Q_N \Sigma Q_0^*$ denote the SVD of $X$ and let $\Lambda = \Sigma^{1/N}$. Then 
+\begin{equation}
+\nonumber
+\bfC=(Q_N \Lambda, \Lambda, \ldots, \Lambda Q_0^*), \quad\mathrm{and}\quad \bfA\cdot \bfC = (Q_N \Lambda A_{N-1}^{-1}, A_{N-1} \Lambda A_{N-2}^{-1},\ldots, A_1 Q_0^*).   
+\end{equation}
+Given $\ww =(W_N,\ldots,W_1) \in \fiberX$, we know that each $W_p$ has full rank since $W_N \cdots W_1=X$. Thus, we may determine $\bfA$ in sequence. First, we choose $A_{N-1}$ such that $Q_N\Lambda A_{N-1}^{-1}= W_N$ by setting $A_{N-1}= Q_N\Lambda W_N^{-1}$. Next, we choose $A_{N-2}$ so that $A_{N-1} \Lambda A_{N-2}^{-1}=W_{N-1}$ and so on. 
+
+Conversely, given $\bfA\in \GLdC^{N-1}$, it is clear that $\bfA\cdot \bfC \in \fiberX$.
+\end{proof}
+
+\subsection{Differential geometry of $\fiberX$}
+The tangent space to $\fiberX$ is computed as follows. Given $\bfa \in \gldC^{N-1}$ we define a curve through the identity using
+\begin{equation}
+    \label{eq:tangent1}
+    \bfA(\tau) = (e^{\tau a_{N-1}}, \cdots, e^{\tau a_1}) := e^{\tau \bfa}, \quad \tau \in (-\infty,\infty).
+\end{equation}
+Then the tangent space $T_{\bfW}\fiberX$ consists of the vectors 
+\begin{equation}
+    \label{eq:tangent2}
+    \bfw_\bfa := \left. \frac{d}{d\tau} e^{\tau \bfa} \cdot \bfW\right|_{\tau=0}, \quad \bfa \in \gldC^{N-1}.
+\end{equation}
+We substitute in equation~\eqref{eq:group-action1} to find  
+\begin{equation}
+    \label{eq:tangent3}
+    \bfw_\bfa = (-W_N a_{N-1}, a_{N-1}W_{N-1} - W_{N-1}a_{N-2}, \cdots, a_1 W_1), \quad \bfa \in \gldC^{N-1}.
+\end{equation}
+Consider a smooth function $F:\fiberX \to \R$. We define the differential $dF$ by its action on $T_\ww \fiberX$ as follows:
+\begin{equation}
+    \label{eq:differential1}
+    dF(\ww) \bfw_\bfa = \left. \frac{d}{d\tau} F(\ww(\tau))\right|_{\tau=0}, \quad \ww(\tau) = e^{\tau \bfa} \cdot \bfW.
+\end{equation}
+\begin{lemma}
+    \label{le:moments} Let $F(\ww)= \tfrac{1}{2}\|\ww\|_2^2$. Then
+    \begin{equation}
+    \label{eq:differential2} 
+     dF(\ww) \bfw_\bfa = \frac{1}{2}\sum_{k=1}^{N-1} \Tr\left(G_k (a_k + a_k^*)\right) = \sum_{k=1}^{N-1} \mathrm{Re}\, \Tr\left(G_k^* a_k\right).
+    \end{equation}
+\end{lemma}
+\begin{proof}
+Consider a curve $\ww(\tau)$ with $\ww(0)=\ww$ and $\dot{\ww}(0)=\bfw_\bfa$. We differentiate the expression
+\[ 2F(\ww(\tau))= \sum_{k=1}^N \Tr\left(W_k^*(\tau)W_k(\tau)\right) \]
+with respect to $\tau$ and evaluate it at $\tau=0$ to obtain
+\begin{eqnarray}
+&& \lefteqn{2 dF(\ww) \bfw_\bfa= -\Tr\left( a_{N-1}^*W_N^*W_N + W_N^*W_N a_{N-1}\right)} \\
+\nonumber
+&& + \sum_{k=2}^{N-1} \Tr \left( (W_k^*a_k^* -a^*_{k-1}W_k^*)W_k + W_k^*(a_kW_k -W_ka_{k-1}) \right) + \Tr \left(W_1^* a_1^*W_1+ W_1^*a_1 W_1\right) \\
+\nonumber
+&& = \sum_{k=1}^{N-1} \Tr \left( (W_kW_k^*-W_{k+1}^*W_{k+1}) (a_k +a^*_k)\right)  = \sum_{k=1}^{N-1} \Tr \left( G_k (a_k +a^*_k)\right).
+\end{eqnarray} 
+The second equality in equation~\eqref{eq:differential2} follows because $G_k=G_k^*$.
+\end{proof}
+\subsection{Riemannian geometry of $\fiberX$}
+\label{subsec:riemann}
+The inner product $\langle \bfw_\bfa , \bfw_\bfb \rangle$ between two vectors $\bfw_\bfa$ and $\bfw_\bfb$ in $T_{\bfW}\fiberX$ is induced by the inner product on $\Md^N$. We have
+\begin{eqnarray}
+    \nonumber
+    \lefteqn{\langle \bfw_\bfb, \bfw_\bfa \rangle = \mathrm{Re} \, \Tr\left(b_{N-1}^* W_N^*W_N a_{N-1}\right) + }
+    \\  \label{eq:tangent4}
+    && \sum_{k=2}^{N-1}\mathrm{Re} \, \Tr \left( (W_k^*b_k^* - b_{k-1}^*W_k^*)    (a_{k}W_{k} - W_{k}a_{k-1}) \right) 
+    \\ \nonumber
+    && + \mathrm{Re} \, \Tr\left(W_1 W_1^* b_1^* a_1 \right).
+\end{eqnarray}
+The Riemannian manifold $(\fiberX,\iota)$ is completely prescribed by our characterization of $\fiberX$ as a smooth manifold along with the inner-product $\langle \cdot, \cdot \rangle$. 
+
+We express the inner product using the following linear operation.
+\begin{defn}
+\label{def:H}
+Given $\ww \in \fiberX$, define the linear transformation $\mathbf{H}: \gldC^{N-1} \to \gldC^{N-1}$ where $\mathbf{H} =(H_{N-1},\cdots, H_1) $ and $H_k=H_k(\bfc) \in \Md$ is defined by  
+ \begin{equation}
+     \label{eq:defH2}
+     H_k(\bfc)= - W_k c_{k-1} W_k^* + c_k W_k W_k^*  + W^*_{k+1}W_{k+1} c_k - W^*_{k+1}c_{k+1}W_{k+1}.
+ \end{equation}
+ We adopt the convention that $c_0=c_N=0$.
+\end{defn}
+%In order to understand the inner-product, 
+%We find it convenient to rewrite the inner-product it in the following form
+\begin{lemma}
+    \label{le:defH}
+The inner product $\langle \bfw_\bfb, \bfw_\bfa \rangle$ may be rewritten as
+\begin{equation}
+    \label{eq:defH1}
+    \langle \bfw_\bfb, \bfw_\bfa \rangle = \sum_{k=1}^{N-1}\mathrm{Re} \, \Tr (H_k(\bfb)^* a_k) = \sum_{k=1}^{N-1}\mathrm{Re} \, \Tr (b_k^* H_k(\bfa)). 
+\end{equation}
+\end{lemma}
+\begin{proof}
+This Lemma is just a convenient reorganization of the terms in equation~\eqref{eq:tangent4}. 
+
+Let us prove the first equality. Collect the terms involving $a_k$ in the first equality in equation~\eqref{eq:tangent4} to obtain 
+\begin{equation}
+    \label{eq:defH3}
+\Tr \left( (W_k^*b_k^* - b_{k-1}^*W_k^*)a_{k}W_{k}\right) -   \Tr \left( (W_{k+1}^*b_{k+1}^* - b_{k}^* W_{k+1}^*)W_{k+1}a_{k} \right).
+\end{equation}
+Since the trace is cyclic, we may rewrite the above expression as
+\begin{equation}
+    \nonumber
+\Tr \left( (W_kW_k^*b_k^* - W_kb_{k-1}^*W_k^*)a_{k}\right) -   \Tr \left( (W_{k+1}^*b_{k+1}^*W_{k+1} - b_{k}^* W_{k+1}^*W_{k+1})a_{k} \right). 
+\end{equation}
+This is $\Tr(H_k(\bfb)^*a_k)$. We sum over $k$ to obtain the first equality in equation~\eqref{eq:defH1}. The proof of the second equality is similar.  
+\end{proof}
+The meaning of the matrices $H_k$  may be clarified as follows. 
+%\begin{equation}
+%\label{eq:def-grad7} 
+%\mathbf{H} = (H_{N-1}, \cdots, H_1), \quad\mathrm{and}\quad\mathbf{H}^* = (H^*_{N-1}, %\cdots, H_1^*).
+%\end{equation}
+\begin{lemma}
+    \label{le:grad-moment-2} 
+    $\mathbf{H}(\bfc)+ \mathbf{H}^*(\bfc)$ is the pushforward of $\bfw_\bfc \in T_\ww \fiberX$ under the map $\ww \mapsto \bfG$. 
+  \end{lemma}
+Here we use the following notation for the pushforward
+  \begin{equation}
+  d\bfG \,\bfw_\bfc = (dG_{N-1}\bfw_\bfc,\ldots,dG_1\bfw_\bfc).    
+  \end{equation}
+\begin{proof}
+Fix $\ww \in \fiberX$ and consider a curve $\ww(\tau)$ such that $\ww(0)=\ww$ and $\dot{\ww}(0)=\bfw_\bfc$. Then by definition $dG_k \bfw_\bfc= \dot{G}_k$ where the curve $\bfG(\tau)$ is defined through the moment map applied to $\ww(\tau)$. Thus, to prove the lemma it is enough to show that
+   \begin{equation}
+    \label{eq:def-grad5}
+        \dot{G}_k = H_k +H_k^*, \quad 1\leq k \leq N-1.        
+    \end{equation}
+We differentiate $G_k = W_k W_k^* - W_{k+1}^* W_{k+1}$ with respect to $\tau$ to find
+\begin{equation}
+\label{eq:grad-moment3}
+\dot{G}_k = \dot{W}_k W_k^* + W_k \dot{W}_k^* - \dot{W}_{k+1}^* W_{k+1} - W_{k+1}^* \dot{W}_{k+1}.
+\end{equation}
+Set $\tau=0$ and substitute $\dot{W_k} = c_k W_k - W_k c_{k-1}$ into equation~\eqref{eq:grad-moment3} to obtain
+\begin{eqnarray}
+\label{eq:grad-moment4}
+\lefteqn{\dot{G}_k = (c_k W_k- W_k c_{k-1}) W_k^* + W_k (c_k W_k- W_k c_{k-1})^*}
+\\ \nonumber
+&& - (c_{k+1} W_{k+1}- W_{k+1} c_{k})^* W_{k+1} - W_{k+1}^*(c_{k+1} W_{k+1}- W_{k+1} c_{k})
+\\ \nonumber
+&& = c_k W_k W_k^*- W_k c_{k-1} W_k^* + W_k W_k^*c_k^*- W_k c_{k-1}^*W_k^* 
+\\ \nonumber 
+&& -W_{k+1}c_{k+1}^*W_{k+1}^*+ c_{k}^*W_{k+1}^* W_{k+1} - W_{k+1}^*c_{k+1} W_{k+1} + W_{k+1}^*W_{k+1} c_{k}.
+\end{eqnarray}
+We now rearrange terms to obtain  the identity~\eqref{eq:def-grad5}.
+\end{proof}
+
+\subsection{The regularizing flow}
+The gradient of $F:\fiberX\to \R$, denoted $\grad F$, is the unique tangent vector in $T_\ww \fiberX$ such that  
+\begin{equation}
+    \label{eq:def-grad}
+    \langle \grad F , \bfw_\bfa \rangle = dF \, \bfw_\bfa, \quad \bfw_\bfa \in T_\ww \fiberX.
+\end{equation}
+In coordinates, $\grad F$ is obtained by solving a linear system. By the characterization of $T_\ww \fiberX$ and the non-degeneracy of the inner-product $\langle \cdot, \cdot \rangle$, we see that
+\begin{equation}
+    \label{eq:def-grad2} \grad F = \bfw_\bfb
+\end{equation}
+for a unique $\bfb \in \gldC^{N-1}$ that is determined by the linear system
+\begin{equation}
+    \label{eq:def-grad3} \langle \bfw_\bfb, \bfw_\bfa \rangle = dF \, \bfw_\bfa, \quad \bfw_\bfa \in T_\ww \fiberX.
+\end{equation}
+The solution to this system completes the prescription of the gradient flow of $F$
+\begin{equation}
+    \label{eq:def-grad11} \dot\ww = - \grad F, \quad \ww \in \fiberX.
+\end{equation}
+
+Let us now specialize to the case where $F(\ww) = \tfrac{1}{2} \|\ww\|_2^2$ is the $L^2$ regularizer.
+We now use Lemma~\ref{le:moments} and Lemma~\ref{le:defH} to obtain
+\begin{lemma}
+    \label{le:grad} $\grad \tfrac{1}{2} \|\ww \|^2 = \bfw_\bfb$ where $\bfb$ solves the block tridiagonal system 
+\begin{equation}
+\label{eq:def-grad12}
+H_k(\bfb)= G_k, \quad 1\leq k \leq N-1.    
+\end{equation}
+\end{lemma}
+The block tridiagonal structure is as follows.  Since $G_k=G_k^*$ we have
+\begin{equation}
+\label{eq:def-grad12a}
+H_k(\bfb)^* = H_k^*(\bfb), \quad 1\leq k \leq N-1.   
+\end{equation}
+We now use Definition~\ref{def:H} to see that equation~\eqref{eq:def-grad12} is equivalent to 
+    \begin{eqnarray}
+        \nonumber
+        && -W_k(b_{k-1}+b_{k-1}^*) + \\
+        \label{eq:def-grad4}
+        && b_k W_k W_k^* + W_k W_k^* b_k^* + W_{k+1}^*W_{k+1}b_k + b_k^* W_{k+1}^* W_{k+1} \\
+        \nonumber
+        && - W_{k+1}^*(b_{k+1}+ b_{k+1}^*) W_{k+1}= 2 G_k, \quad 1 \leq k \leq N-1.
+    \end{eqnarray}
+%Observe also that equation~\eqref{eq:def-grad12} further simplifies to $H_k=2G_k$ under the symmetry condition~\eqref{eq:def-grad12a}. We have written it as above to emphasize the manner in which one must solve for $\bfb$ given $\bfG$. Note that 
+%The definition of $H_k$ in equation~\eqref{eq:defH1} does not imply that $H_k=H_k^*$ in general. The symmetry condition is specific to the gradient flow of $\|\ww \|^2$.
+\begin{proof}
+We use equation~\eqref{eq:differential2} and equation~\eqref{eq:defH1} to obtain the identity
+\begin{equation}
+    \mathrm{Re} \Tr(H_k^*(\mathbf{b}) a_k) = \mathrm{Re} \Tr \left(G_k^* a_k)\right) =0, \quad 1\leq k \leq N-1.
+\end{equation}  
+This identity holds for all $a_k \in \Md$. The theorem follows immediately because of the degeneracy of the inner-product defined in~\eqref{eq:ipc-1}.
+%It follows that $\Tr(H_k^* a_k)=0$ when $a_k=-a_k^*$. Thus, $H_k = H_k^*$ since the space of Hermitian and anti-Hermitian matrices are orthogonal under the inner-product on $\Md$ given by $\Tr$. But then we also have the identity $\Tr \left( (H_k-2G_k) a_k\right) =0$ for all Hermitian $a_k$. Since $H_k-2G_k$ is Hermitian, it follows that $H_k=2G_k$. 
+%This is equivalent to the statement of the Lemma.
+\end{proof}
+The form of these equations allows us to linearize the regularizing flow.
+%\begin{theorem}
+%The evolution of the moments under the gradient flow  $\dot \ww = -\grad \|\ww\|^2$ is given by the linear equation
+%\end{theorem}
+\begin{proof}[Proof of Theorem~\ref{thm:reg-flow}]
+By Lemma~\ref{le:grad}, $\grad \tfrac{1}{2}\|\ww\|^2 = \bfw_\bfb$ where $\bfb$ satisfies equation~\eqref{eq:def-grad12}. Therefore, by Lemma~\ref{le:grad-moment-2} and Lemma~\ref{le:grad} 
+\begin{equation}
+\label{eq:dotG}
+\dot{\bfG} = d\bfG \bfw_\bfb = -2 \bfG.     
+\end{equation} 
+\end{proof}
+\begin{remark}
+\label{rem:proof-reg-flow}
+Our proof of Theorem~\ref{thm:reg-flow} relies on explicit computations with the Riemannian manifold $(\fiberX,\iota)$. We present these calculations since they allow us to consider other gradient flows on $\fiberX$, such as the Kirwan-Ness flow introduced below. However, the reader should note that the cancellations that lead to the closed form for $\dot{\bfG}$ have a simple geometric origin. 
+
+We first observe that the gradient of $\tfrac{1}{2}\|\ww\|_2^2$ in $\Md^N$ is simply $\ww$. The gradient may then be decomposed into two components $\bfw_\bfb=\grad \tfrac{1}{2}\|\ww\|^2 \in T_\ww\fiberX$ and $\ww^\perp:=\ww-\bfw_\bfb \in T_\ww\fiberX^\perp$.  The conservation laws for $\bfG$ are due to the fact that $T_\ww\fiberX^\perp$ lies in the nullspace of $d\bfG$. Thus,
+\[ d\bfG \, \bfw_\bfb = d\bfG \,\ww = -2\bfG,\]
+after an easy calculation. %In the second inequality we abuse notation somewhat, referring to the one form $d\bfG$ as acting on both $T_\ww \fiberX$ and $T_\ww \Md^N$.
+\end{remark}
+\subsection{The Kirwan-Ness flow}
+\label{sec:ness}
+The Morse theory of the squared moment map is a fundamental concept in Kirwan and Ness' work~\cite{Kirwan,Ness}. We derive its gradient flow for the DLN by applying the calculations of Section~\ref{subsec:riemann} to the function
+\begin{equation}
+    \label{eq:ness-function}
+    \frac{1}{2} \|\bfG\|_2^2 = \frac{1}{2} \sum_{k=1}^{N-1} \Tr(G_k^*G_k) = \frac{1}{2} \sum_{k=1}^{N-1} \Tr(G_k^2).
+\end{equation}
+Set $\bfc=\bfG$ in definition~\ref{eq:defH1} to obtain the matrices
+\begin{equation}
+     \label{eq:defH7}
+     H_k(\bfG)= - W_k G_{k-1} W_k^* + G_k W_k W_k^*  + W^*_{k+1}W_{k+1} G_k - W^*_{k+1}G_{k+1}W_{k+1}.
+ \end{equation}
+ \begin{theorem}
+     \label{thm:ness-flow}
+The gradient flow of $\tfrac{1}{2}\|\bfG\|^2_2$ is 
+\begin{equation}
+\label{eq:ness-flow1}
+    \dot{\ww} = -  \bfw_{2\bfG},
+\end{equation}
+or equivalently, the cubic system~\eqref{eq:ness-flow-coords}. The corresponding evolution of the moments is given by
+\begin{equation}
+\label{eq:ness-flow2}
+    \dot{\bfG} = - 2\left( \mathbf{H}(\bfG) + \mathbf{H}(\bfG)^*\right).
+\end{equation}
+\end{theorem}
+\begin{proof}
+For convenience of notation, let $F(\ww)=\tfrac{1}{2}\|\bfG \|_2^2$. Then 
+\begin{equation}
+\label{eq:ness-flow3}
+dF(\ww)\bfw_\bfa = \sum_{k=1}^{N-1} \Tr \left( G_k dG_k \bfw_\bfa\right)=   \sum_{k=1}^{N-1} \Tr \left( G_k (H_k(\bfa)+ H_k(\bfa)^*\right).    
+\end{equation} 
+On the other hand, if $\grad F = \bfw_\bfb$ then by Lemma~\ref{eq:defH1}
+\begin{equation} 
+\label{eq:ness-flow4}
+\langle \grad F, \bfw_\bfa \rangle = \langle \bfw_\bfb, \bfw_\bfa \rangle= \sum_{k=1}^{N-1} \mathrm{Re} \Tr \left(b_k^*H_k(\bfa)\right). 
+\end{equation}
+Thus, we have the identity
+\begin{equation} 
+\label{eq:ness-flow5}
+\sum_{k=1}^{N-1} \mathrm{Re}  \Tr \left(b_k^*H_k(\bfa)\right) =  \sum_{k=1}^{N-1} \Tr \left( G_k (H_k(\bfa)+ H_k(\bfa)^*\right) = 2 \sum_{k=1}^{N-1} \mathrm{Re} \Tr \left( G_k (H_k(\bfa)\right). 
+\end{equation}
+When $X$ has full rank, $\mathbf{H}$ is an isomorphism. Thus, $b_k=2G_k^*=2G_k$. Equation~\eqref{eq:ness-flow2} follows from Lemma~\ref{le:grad-moment-2} with $\bfc=2\bfG$.
+\end{proof}
+
+%
+%and the rate of convergence of $\|bfG\|^2$ is determined by the comparison between the inner-products in $\Md^N$ and $T\fiberX
+\begin{remark}
+While we assumed that $\mathbf{W}\in \fiberX$ in order to define the gradient flow~\eqref{eq:ness-flow1} we see that the flow is given by the cubic system~\eqref{eq:ness-flow-coords} which is defined on all of $\Md^N$. Thus, the flow may be easily implemented numerically. Its convergence as $t \to \infty$ follows from the general theory for the gradient flow of the squared moment map. An excellent exposition is provided by Lerman and adapting~\cite[Thm. 1]{Lerman} we have
+\begin{corollary}
+\label{cor:ness-flow}
+The $\omega$-limit set $\omega(\mathbf{W})$ under the Kirwan-Ness flow for any $\mathbf{W}\in \Md^N$  is a single point on the balanced variety $\mathcal{M}_0$. 
+\end{corollary}
+\end{remark}
+The Kirwan-Ness flow presents an interesting contrast with the regularizing flow for $\tfrac{1}{2}\|\ww\|^2$. Lemma~\ref{le:grad} shows that when we consider the functional $\tfrac{1}{2}\|\ww\|_2^2$, the gradient $\grad \tfrac{1}{2} \|\ww\|_2^2 =\bfw_\bfb$ where $\bfb$ is given implicitly through the solution of the linear system ~\eqref{eq:def-grad12}. This makes numerical implementations of this regularizing flow subtle, since one must solve for $\bfb$ at each step. However, despite the implicit nature of the regularizing flow, Theorem~\ref{thm:reg-flow} tells that $\bfG$ evolves by pure scaling.
+
+In contrast, the Kirwan-Ness flow~\eqref{eq:ness-flow1} is given explicitly by~\eqref{eq:ness-flow-coords} and is easy to implement numerically. On the other hand, while it is immediate from the definition of the gradient flow~\eqref{eq:ness-flow1} that 
+\begin{equation}
+\label{eq:ness-flow7}
+    \frac{d}{dt}\tfrac{1}{2}{\|\bfG\|_2^2} =  - 2\|\bfw_\bfG \|_2^2 ,
+\end{equation}
+we do not have a closed evolution equation for $\bfG$.
+
+
+
+
+
+ 
+
+

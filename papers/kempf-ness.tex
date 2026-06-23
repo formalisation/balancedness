@@ -1,0 +1,534 @@
+% ============================================================================
+%  CLEANED / CORRECTED edition of:
+%
+%      George Kempf and Linda Ness,
+%      "The length of vectors in representation spaces",
+%      in: Algebraic Geometry (Copenhagen 1978),
+%      Lecture Notes in Mathematics 732, Springer-Verlag, pp. 233-243.
+%      DOI 10.1007/BFb0066647
+%
+%  This is a faithful transcription with spelling/transcription errors and a
+%  handful of genuine errata of the original typescript corrected.  Every change
+%  relative to the verbatim transcription (kempf-ness-verbatim.tex) is flagged
+%  inline with a "% CORRECTION" comment.  Mathematical statements were checked
+%  against Mumford, Geometric Invariant Theory (the notion of a "properly
+%  stable" point requires a FINITE stabilizer), and against the paper's own
+%  internal usage.
+%
+%  Summary of corrections:
+%   1. intro: "algebriac" -> "algebraic"
+%   2. heading: mis-numbered "\S4. The reductive case" -> "\S3."
+%   3. p.238: "by che results" -> "by the results"
+%   4. p.239: statement *), "such that that" -> "such that the"
+%   5. p.239: defn of properly stable, "G_v is connected" -> "G_v is finite"
+%   6. p.240: "criterian" -> "criterion"
+%   7. p.242: "the only possiblity" -> "possibility"
+%   8. p.242: "consists the elements" -> "consists of the elements"
+%   9. ref [1]: "algebriac" -> "algebraic"
+%  10. ref [3]: "arithmetiques" -> "arithmetiques" with accent
+%  11. ref [6]: "Instability invariant theory ... to appear" -> correct title
+%      "Instability in invariant theory" with published coordinates
+%  Two scan-restorations (already mathematically forced) are also present:
+%   - p.239 c): "...is closed and v != 0" (per the introduction's definition)
+%   - p.241: the relevant limit is x -> -infinity (since x = log|t| and t -> 0)
+% ============================================================================
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage[margin=1in]{geometry}
+
+% --- theorem-like environments with the original (manual) numbering ----------
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}{Lemma}
+\newtheorem{prop}{Proposition}
+\newtheorem{cor}{Corollary}
+
+\renewcommand{\qedsymbol}{Q.E.D.}
+
+\newlist{abc}{enumerate}{1}
+\setlist[abc]{label=\textup{\alph*)}, leftmargin=*, labelsep=0.6em, itemsep=0.4ex}
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
+\newcommand{\norm}[1]{\lVert #1 \rVert}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\begin{document}
+
+\begin{center}
+  {\large The length of vectors in representation spaces}\\[2.5em]
+  \begin{tabular}{c@{\hspace{2.5em}}c@{\hspace{2.5em}}c}
+    George Kempf\textsuperscript{*} & and & Linda Ness\\[0.3em]
+    The Johns Hopkins University &  & University of Washington\\
+    and Princeton University &  & and The Institute for\\
+     &  & Advanced Study
+  \end{tabular}
+\end{center}
+\blfootnote{*Partly supported by NSF contract \#MPS75-05578.}
+
+\bigskip
+
+Let $V$ be a finite dimensional morphic representation of a connected reductive
+% CORRECTION: "algebriac" -> "algebraic"
+algebraic group $G$ over the complex numbers.
+Given a maximal compact subgroup $K$ of $G$, we will fix a Hermitian norm
+$\norm{\ }$ on $V$ so that the action of $K$ on $V$ preserves this norm.
+
+Let $v$ be a vector in $V$. The purpose of this paper is to study how the length
+changes as one moves along the orbit $G\cdot v$. Thus we want to examine the
+function $p_v(g)=\norm{g\cdot v}^2$ on $G$. If $G_v$ denotes the stabilizer of
+$v$ in $G$, the function $p_v$ on $G$ is invariant on the left by $K$ and on the
+right by $G_v$. Hence $p_v$ is constant on double $K-G_v$ cosets of the form
+$K\cdot g\cdot G_v$.
+
+In this paper we will show that the function $p_v$ has very special properties.
+We will first prove
+
+\renewcommand{\thethm}{0.1}
+\begin{thm}\leavevmode
+\begin{abc}
+\item Any critical point of $p_v$ is a point where $p_v$ obtains its minimum
+      value.
+\end{abc}
+If $p_v$ obtains a minimum value,
+\begin{abc}[start=2]
+\item then the set $m$ where $p_v$ obtains this value consists of a single
+      $K-G_v$ coset and is connected, and
+\item the second order variation of $p_v$ at a point of $m$ in any direction not
+      tangent to $m$ is positive.
+\end{abc}
+\end{thm}
+
+With this theorem in mind, one may ask, ``when does $p_v$ obtain a minimum
+value?'' If $v$ is a stable vector (i.e., the orbit $G\cdot v$ is closed and
+$v\neq 0$), then $p_v$ clearly obtains a minimum value. The converse is also true
+by
+
+\renewcommand{\thethm}{0.2}
+\begin{thm}
+The vector $v$ is stable if and only if $p_v$ obtains a minimum value.
+\end{thm}
+
+The development of the properties of the function $p_v$ is similar to that of
+Mumford's numerical function (See [8] and [6]). Also the functions $p_v$ for
+certain unstable vectors $v$ play an interesting role in Borel's treatment of
+reduction theory [3]. Furthermore, related material may be found in [1,4,7]. We
+hope that our results may be useful for studying moduli via geometric invariant
+theory.
+
+In section one, we will deal abstractly with a more general type of function
+related to the functions like $p_v$. In the next section, we will apply the
+previous ideas to prove Theorem 0.1 when $G$ is an algebraic torus. In the third
+section, we will treat a general reductive group. In the last section, we will
+prove Theorem 0.2.
+
+\bigskip
+\noindent\textbf{\S1.\quad Special functions on affine spaces}
+\medskip
+
+Let $A$ be a finite dimensional affine space over the real numbers. A special
+function on $A$ is a finite sum $\sum e^{H_i(a)}$ where the $H_i$ are affine
+functions on $A$.
+
+We will begin by studying special functions where $A$ is the real line $\R$.
+Thus a special function on $\R$ may be written uniquely as
+$f(x)=\sum a_i e^{\ell_i\cdot x}$, where the $a_i$'s are positive real numbers
+and the $\ell_i$'s are distinct real numbers. By calculus, we may deduce
+
+\renewcommand{\thelem}{1.1}
+\begin{lem}\leavevmode
+\begin{abc}
+\item The second derivative $f''$ is never negative.
+\item If $f''$ is zero anywhere, then $f$ is constant.
+\item A non-constant special function on $\R$ is a strictly convex Morse
+      function.
+\end{abc}
+\end{lem}
+
+\begin{proof}
+For a), note that $f''(x)=\sum (a_i\cdot\ell_i^{2})e^{\ell_i\cdot x}$ is the sum
+of non-negative terms and, hence, $f''$ is never negative. For b), if
+$f''(x)=0$ for some $x$, then $a_i\cdot\ell_i^{2}=0$ for each $i$. This can only
+happen if $\ell_i=0$ as $a_i\neq 0$. Therefore, if $f''(x)=0$ for some $x$, then
+$f$ is a constant function. This proves b). Part c) results from a) and b).
+\end{proof}
+
+A special function on an affine space is called degenerate if its restriction to
+any line is constant. We may generalize part a) of the last lemma in
+
+\renewcommand{\theprop}{1.2}
+\begin{prop}
+Any non-degenerate special function $f$ on an affine space is a strictly convex
+Morse function. Hence, if $f$ has a critical point, it must be the unique point
+where $f$ obtains its minimum value.
+\end{prop}
+
+\begin{proof}
+As $f$ is non-degenerate, its restriction to any line is a strictly convex Morse
+function. Therefore, $f$ is strictly convex and has positive second order
+variation through its critical points. This proves the first statement. The
+second statement follows formally from the first.
+\end{proof}
+
+To finish our discussion of special functions, we will show how to reduce the
+general case to the non-degenerate case. The reduction will be achieved by means
+of
+
+\renewcommand{\thelem}{1.3}
+\begin{lem}
+Let $f$ be a special function on an affine space $A$. There is a unique quotient
+affine space $B$ of $A$ and a non-degenerate special function on $B$ such that
+$f=g\circ\pi$ where $\pi:A\to B$ is the quotient mapping.
+\end{lem}
+
+\begin{proof}
+If $f=\sum e^{H_i(a)}$ where the $H_i$'s are affine functions on $A$, there is a
+maximal affine subspace $M_a$ through any point $a$ of $A$ such that each
+$H_i|_{M_a}$ is constant. As the $M_a$'s are parallel and have the same
+dimension, these subspaces $\{M_a\}$ form a quotient affine space, say $B$.
+Clearly, $f$ descends to a special function $g$ on $B$. One may easily check that
+$g$ is non-degenerate by using the maximality of the $M_a$. The uniqueness
+assertion is obvious.
+\end{proof}
+
+We may now generalize the last proposition in
+
+\renewcommand{\thethm}{1.4}
+\begin{thm}
+Let $f$ be a special function on an affine space $A$. Then,
+\begin{abc}
+\item $f$ is convex,
+\item $f$ has no critical points outside of the set $m$ of points where $f$
+      obtains its minimum value,
+\item $m$ is an affine subspace of $A$,
+\item at any point of $m$, the second order variation of $f$ is positive in any
+      direction not tangent to $m$.
+\end{abc}
+\end{thm}
+
+\begin{proof}
+By Lemma 1.3, the stated properties may be easily deduced from the Proposition
+1.2.
+\end{proof}
+
+\bigskip
+\noindent\textbf{\S2.\quad The toroidal case.}
+\medskip
+
+In this section, we will assume that the group $G$ of the introduction is an
+algebraic torus $T=\{(t_1,\dots,t_n)\mid t_i\in\C-\{0\}\}$. The maximal compact
+subgroup $K_T$ consists of the elements of $T$ whose coordinates have absolute
+value one.
+
+Consider the morphic representation of $T$ on $V$. Then $V$ may be written
+uniquely as the direct sum $V=\bigoplus V_\chi$ where $V_\chi$ is the
+$\chi$-eigenspace of $V$ for the characters $\chi$ of $T$. Recall that a
+character $\chi:T\to\C-\{0\}$ is a (morphic) homomorphism sending
+$(t_1,\dots,t_n)$ to $\prod t_i^{m_i}$ where $(m_1,\dots,m_n)$ is a sequence of
+integers.
+
+Our Hermitian norm $\norm{\ }$ on $V$ is invariant under $K_T$ if and only if two
+eigenspaces with distinct characters are perpendicular. With this information, we
+may easily determine the nature of the functions $p_v(t)=\norm{t\cdot v}^2$ for
+any vector $v$ in $V$.
+
+\renewcommand{\thelem}{2.1}
+\begin{lem}
+For any vector $v$ in $V$, there is a finite set $\Xi(v)$ of elements in $\Z^n$
+such that
+\begin{abc}
+\item $p_v((t_1,\dots,t_n))=\displaystyle\sum_{(m_i)\in\Xi(v)}(\text{some positive real})
+      \prod|t_i|^{2m_i}$ \quad and
+\item the stabilizer $T_v$ of $v$ in $T$ is given by the system of equations
+      \[ \prod t_i^{m_i}=1 \quad\text{for } (m_i)\in\Xi(v). \]
+\end{abc}
+\end{lem}
+
+\begin{proof}
+Let $v=\sum v_\chi$ be the eigendecomposition of $v$ where each $v_\chi$ is
+non-zero. Let $\Xi(v)$ be the set of sequences $(m_i)$ corresponding to the
+characters which occur in this decomposition. As
+$(t_1,\dots,t_n)\cdot v=\sum_{(m_i)\in\Xi(v)}\prod t_i^{m_i}\cdot v_{(m_i)}$,
+the part b) is evident. Using the orthogonality mentioned above, we have
+\[
+p_v(t_1,\dots,t_n)=\norm{(t_1,\dots,t_n)\cdot v}^2
+=\sum\Bigl\lVert\textstyle\prod t_i^{m_i}\cdot v_{(m_i)}\Bigr\rVert^2
+=\sum\norm{v_{(m_i)}}^2\prod|t_i|^{2m_i}
+\]
+This proves a).
+\end{proof}
+
+To prove the desired facts about the function $p_v$, we may study the induced
+function $p_v'$ on the quotient Lie group $K_T\backslash T$. Next we will
+introduce coordinates on the quotient $K_T\backslash T$. Define
+$x(t_1,\dots,t_n)=(\log|t_1|,\dots,\log|t_n|)=(x_1,\dots,x_n)$ for any
+$(t_1,\dots,t_n)$ in $T$. Thus $x$ defines an isomorphism from $K_T\backslash T$
+with the vector space $\R^n$. With these coordinates we may reinterpret the last
+lemma in
+
+\renewcommand{\thelem}{2.2}
+\begin{lem}
+For any vector in $V$,
+\begin{abc}
+\item $p_v'(x_1,\dots,x_n)=\displaystyle\sum_{(m_i)\in\Xi(v)}
+      e^{\,\text{real}\,+\,2\sum m_i x_i}$ \quad and
+\item the locus $\{\sum m_i x_i=0\text{ for all }(m_i)\text{ in }\Xi(v)\}$ is the
+      image of $T_v$ in $K_T\backslash T$
+\end{abc}
+\end{lem}
+
+\begin{proof}
+This is a trivial reformulation of Lemma 2.1.
+\end{proof}
+
+We will now apply the theory of section one to the function $p_v'$ on
+$K_T\backslash T$. By part a) of Lemma 2.2, we know that $p_v'$ is a special
+function on the vector space $K_T\backslash T=\R^n$. By the proof of Lemma 1.3
+and the part b) of Lemma 2.2, we know that the function $p_v'$ comes from a
+non-degenerate special function on
+\[
+\R^n/\{\textstyle\sum m_i x_i=0\mid(m_i)\in\Xi(v)\}=K_T\backslash T/T_v.
+\]
+Therefore, by the results of the last section, we have verified the theorem 0.1
+% CORRECTION: "by che results" -> "by the results"
+when $G$ is an algebraic torus. We will next show how the general case follows
+from the toroidal case.
+
+\bigskip
+\noindent\textbf{\S3.\quad The reductive case.}% CORRECTION: original mis-numbers this "\S4"; the introduction calls it the third section
+\medskip
+
+Using E.~Cartan's results about the geometry of $K\backslash G$, we will be able
+to deduce the reductive case from the toroidal case of Theorem 0.1. First we will
+recall some of Cartan's results.
+
+Let $\mathcal{T}$ be the set of maximal algebraic tori $T$ in the reductive group
+$G$ such that $K\cap T$ is the maximal compact subgroup $K_T$ of $T$. Thus
+$K_T\backslash T$ is a submanifold of $K\backslash G$. We will need to know the
+Cartan decomposition,
+\begin{abc}[label=\textup{\arabic*)}]
+\item $K\backslash G=\bigcup_{T\in\mathcal{T}}K_T\backslash T$
+
+      and its infinitesimal form
+\item tangent spaces of $K\backslash G$ at $K=\bigcup_{T\in\mathcal{T}}$ tangent
+      space of $K_T\backslash T$ at $K_T$.
+\end{abc}
+[\,for instance, 5\,].
+
+To prove part a) of theorem 0.1, it will suffice to assume that
+\begin{description}[leftmargin=2em]
+\item[A)] $e$ is the critical point of $p_v$, as $p_{h\cdot v}(g)=p_v(g\cdot h)$.
+\end{description}
+Let $g$ be any point of $G$. We want to prove that $p_v(g)\geq p_v(e)$. By 1),
+$g=k\cdot t$ where $k\in K$ and $t\in T$ for some $T$ in $\mathcal{T}$. By the
+left $K$-invariance of $p_v$, we have $p_v(g)=p_v(t)$. As $e$ must be a critical
+point of $p_v|_T$, we have the inequality $p_v(t)\geq p_v(e)$ by the toroidal
+case of the theorem. Hence, $p_v(g)\geq p_v(e)$ which proves part a) of Theorem
+0.1.
+
+To prove the last two parts of the theorem, it will suffice to treat the
+case where
+\begin{description}[leftmargin=2em]
+\item[B)] $p_v$ obtains its minimum value at $e$ (i.e., $K\cdot G_v\subseteq m$),
+          because $p_{h\cdot v}(g)=p_v(g\cdot h)$ and $G_{h\cdot v}=hG_vh^{-1}$.
+\end{description}
+Let $g$ be an element of $m$. If we write $g=k\cdot t$ as before, we find that
+$t$ is a point of $T$ where $p_v|_T$ obtains its minimum value $p_v(e)$. By the
+toroidal case, $t\in K_T\cdot T_v$ which is a connected subset containing $e$.
+Therefore, $m\subseteq K\cdot(\bigcup_{T\in\mathcal{T}}K_T\cdot T_v)\subseteq
+K\cdot G_v$ and $\bigcup_{T\in\mathcal{T}}K_T\cdot T_v$ is connected. Hence,
+$m=K\cdot G_v\,(=K\cdot\bigcup_{T\in\mathcal{T}}K_T\cdot T_v)$ is connected
+because $K$ is also connected as $G$ is. This proves part b) of the theorem 0.1.
+
+To prove part c) of theorem 0.1, it again will suffice to prove the statement
+about directions through the point $e$ of $m$. Let $p_v'$ be the function induced
+by $p_v$ on $K\backslash G$. We want to show that
+\begin{description}[leftmargin=2em]
+\item[*)] If $X$ is a tangent vector to $K\backslash G$ at $K$ such that the
+          second order variation of $p_v'$ along $X$ is zero, then $X$ is tangent
+          to $K\backslash K\cdot G_v$.% CORRECTION: "such that that" -> "such that the"
+\end{description}
+By 2), $X$ is tangent to $K_T\backslash T$ for some $T$ in $\mathcal{T}$. By the
+toroidal case of the theorem, $X$ must be tangent to
+$K_T\backslash K_T\cdot T_v$ which is contained in $K\backslash K\cdot G_v$.
+This completes the proof of theorem 0.1.
+
+\bigskip
+\noindent\textbf{\S4.\quad Analysis of stability}
+\medskip
+
+In this section we will study the relationship between the stability of a vector
+$v$ in $V$ and the function $p_v$. We will exclude the trivial case $v=0$.
+
+Recall the definitions of various notions of stability. The vector is called
+\begin{abc}
+\item unstable if $\overline{G\cdot v}\ni 0$,
+\item not stable if $G\cdot v$ is not closed,
+\item stable if $G\cdot v$ is closed and $v\neq 0$,
+\item properly stable if $v$ is stable and $G_v$ is finite.% CORRECTION: original says "connected"; a properly stable point has a FINITE stabilizer (Mumford, GIT), as the proofs below also require
+\end{abc}
+Trivially one has the following criterion:% CORRECTION: "criterian" -> "criterion"
+\begin{description}[leftmargin=2em]
+\item[($\dagger$)] $v$ is unstable $\iff \inf p_v=0$.
+\end{description}
+
+The Theorem 0.2 will give us a criterion for $v$ being stable in terms of the
+function $p_v$. To prove Theorem 0.2, we have to show that,
+\begin{description}[leftmargin=2em]
+\item[($*$)] if $v$ is not stable, then $\inf p_v$ is not a value of $p_v$.
+\end{description}
+
+\begin{proof}[Proof of Theorem 0.2.]
+Regard $G$ as an algebraic group defined over $\R$ such that $K$ is the real
+locus of $G$. Then the tori $T$ in $\mathcal{T}$ are exactly the maximal tori of
+$G$, which are defined over $\R$.
+
+Assume that the vector $v$ is not stable. Then we may find a parabolic subgroup
+$P$ of $G$ such that each maximal torus $T$ of $P$ contains a one-parameter
+algebraic subgroup $\lambda_T:\C-\{0\}\to T$ such that
+$\lim_{t\to 0}\lambda(t)\cdot v$ exists in $V$ and is a point outside the orbit
+$G\cdot v$. See [1] or [6].
+
+Let $\overline{P}$ be the parabolic subgroup of $G$, which is conjugate to $P$
+under the real structure on $G$. Then $P\cap\overline{P}$ is a subgroup of $G$
+which is defined over $\R$ and must contain a maximal torus $S$ defined over $\R$
+[2]. As a maximal torus of the intersection of two parabolic subgroups of $G$ is
+a maximal torus of $G$ [2], $S$ is a maximal torus in the collection
+$\mathcal{T}$.
+
+By the one-parameter subgroup $\lambda_S$ of $S$, we have an action of $\C-\{0\}$
+on $V$ such that $v$ is not stable for this action and the maximal compact
+subgroup of $\C-\{0\}$ preserves the Hermitian norm on $V$. As the statement
+($*$) for $\C-\{0\}$ implies the statement ($*$) for $G$, it will suffice to
+prove Theorem 0.2 when $G=\C-\{0\}$. Better yet, we may even assume that
+$\lim_{t\to 0}t*v$ exists in $V$ and does not equal $v$, where $*$ denotes the
+action of $\C-\{0\}$ on $V$.
+
+As in section 2, we may write $p_v'$ on
+$\text{maximal compact}\backslash(\C-\{0\})=\R$ uniquely
+in the form $\sum a_i e^{\ell_i x}$ with positive $a_i$'s and increasing real
+$\ell_i$'s. As the above limit exists, the $\lim_{x\to-\infty}p_v'(x)$ exists in
+$\R$ and, hence, the $\ell$'s are not negative.
+% Note: x = log|t| and t -> 0, so the relevant limit is x -> -infinity
+As the above limit does not equal $v$, at least one $\ell_i$ must be positive.
+Thus, $p_v'(x)$ is a strictly increasing function on $\R$. Hence, $p_v'$ and
+$p_v$ never obtain a minimum value. This proves the statement ($*$) and, hence,
+Theorem 0.2 is true.
+\end{proof}
+
+To finish our criteria for stability, it remains to dramatize the meaning of $v$
+being properly stable in terms of the function $p_v$. We will do this in
+
+\renewcommand{\thethm}{4.1}
+\begin{thm}
+If $v$ is properly stable, then
+\begin{abc}
+\item the induced function $p_v'$ on $K\backslash G$ is a Morse function with one
+      critical point where it obtains its minimum value.
+\end{abc}
+If furthermore $p_v$ obtains its minimum value at the identity $e$, then
+\begin{abc}[start=2]
+\item the stabilizer $G_v$ is contained in $K$.
+\end{abc}
+Conversely, if $p_v'$ obtains a minimum at a unique point of $K\backslash G$,
+then $v$ is properly stable.
+\end{thm}
+
+\begin{proof}
+For a), note that Theorems 0.1 and 0.2 say that the only critical points of $p_v$
+are situated on a connected $K-G_v$ coset $m$ where $p_v$ obtains its minimum
+value. As $G_v$ is finite, this double coset $m$ is actually a $K$-coset. Hence,
+$p_v'$ has only one critical point on $K\backslash G$ where it obtains its
+minimum. The last part of Theorem 0.1 means in this case that the second order
+variation of $p_v'$ in any non-zero direction through its critical point is
+positive. In other words, $p_v'$ is a Morse function. This proves a).
+
+To prove b), note that a) implies that $K\cdot G_v=K$ as $K$ is the unique
+critical point of $p_v'$ and $p_v'$ is right invariant under $G_v$. Therefore,
+$G_v\subseteq K$. This proves b).
+
+For c), note that Theorem 0.2 shows that $v$ is stable because $p_v$ obtains a
+minimum value. As we may assume without loss of generality that $p_v'$ obtains
+its minimum at the point $K$ in $K\backslash G$, we have the inclusion
+$K\cdot G_v\subseteq K$. Hence, $G_v\subseteq K$. As $G_v$ is a compact algebraic
+subgroup of $G$, it can only be contained in the compact group $K$ if $G_v$ is
+finite. Therefore, $G_v$ is finite and, hence, $v$ is properly stable.
+\end{proof}
+
+Trivially we want to mention a special way to find a vector in the orbit
+$G\cdot v$ where $p_v$ obtains a minimum value.
+
+\renewcommand{\thecor}{4.2}
+\begin{cor}
+Assume that $v$ is properly stable and $G_v$ is contained in $K$. If
+$K=\{g\in G\mid gG_vg^{-1}\subseteq K\}$, then $p_v$ obtains its minimum value at
+$e$.
+\end{cor}
+
+\begin{proof}
+The stabilizer of $g\cdot v$ is $gG_vg^{-1}$. By Theorem 4.1, we know that
+$gG_vg^{-1}\subseteq K$ if $p_v$ has a minimum at $g$. Therefore the hypothesis
+means that the coset $K$ is the only possibility for the set where $p_v$ obtains
+% CORRECTION: "possiblity" -> "possibility"
+its minimum.
+\end{proof}
+
+An example where this hypothesis is satisfied is when $G=\mathrm{SL}(W)$, the
+induced representation of the finite group $G_v$ on $W$ is irreducible and $K$
+consists of the elements of $G$ which preserve some Hermitian norm of $W$.
+% CORRECTION: "consists the elements" -> "consists of the elements"
+The hypothesis applies because of the uniqueness up to scalar of the Hermitian
+norm invariant under the action of an irreducible representation.
+
+This kind of example actually occurs in the study of covariants of abelian
+varieties over $\C$ embedded by complete linear systems.
+
+\bigskip
+\begin{flushleft}
+\textbf{References}
+\end{flushleft}
+\begin{list}{}{\setlength{\leftmargin}{2.5em}\setlength{\labelwidth}{2em}%
+  \setlength{\itemindent}{-2.5em}\setlength{\itemsep}{0.6ex}}
+\item[{[1]}] D.~Birkes, Orbits of linear algebraic groups, Annals of Mathematics
+  93(1971), 459--475.% CORRECTION: "algebriac" -> "algebraic"
+\item[{[2]}] A.~Borel, Linear Algebraic Groups, Benjamin, New York, 1969.
+\item[{[3]}] A.~Borel, Introduction aux groupes arithmétiques, Hermann, Paris,
+  1969.% CORRECTION: added accent: "arithmetiques" -> "arithmétiques"
+\item[{[4]}] A.~Borel and Harish-Chandra, Arithmetic subgroups of algebraic
+  groups, Annals of Mathematics 75(1962), 485--535.
+\item[{[5]}] S.~Helgason, Differential Geometry and Symmetric Spaces, Academic
+  Press, New York, 1962.
+\item[{[6]}] G.~Kempf, Instability in invariant theory, Annals of Mathematics
+  108(1978), 299--316.% CORRECTION: title "Instability in invariant theory"; "to appear" -> published coordinates
+\item[{[7]}] G.~Mostow and T.~Tamagawa, On the compactness of arithmetically
+  defined homogeneous spaces, Annals of Mathematics 76(1962).
+\item[{[8]}] D.~Mumford, Geometric Invariant Theory, Ergebnisse der Math. (34),
+  Springer-Verlag, Berlin, 1965.
+\end{list}
+
+\bigskip\bigskip
+\begin{flushright}
+\begin{tabular}{l}
+The Johns Hopkins University\\
+Baltimore, Maryland 21218\\
+USA\\[1.5em]
+University of Washington\\
+Seattle, Washington 98105\\
+USA
+\end{tabular}
+\end{flushright}
+
+\end{document}

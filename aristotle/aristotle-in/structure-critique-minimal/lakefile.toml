@@ -1,0 +1,6 @@
+name = "structure-critique-minimal"
+version = "0.1.0"
+defaultTargets = ["Skeleton"]
+
+[[lean_lib]]
+name = "Skeleton"

@@ -1,0 +1,49 @@
+{
+  "jobs": [
+    {
+      "id": "c8adefc9-1a0b-44ae-a6b9-65b1a3fd9ab6",
+      "submission": "aristotle-in/structure-critique",
+      "output": "aristotle-out/structure-critique_aristotle",
+      "target": "structure-critique",
+      "note": "structure-proof-strategy-critique",
+      "status": "downloaded",
+      "archive": "/Users/yangd/Documents/balancedness/aristotle/aristotle-out/structure-critique_aristotle.tar.gz",
+      "solution": "/Users/yangd/Documents/balancedness/aristotle/aristotle-out/structure-critique_aristotle"
+    },
+    {
+      "id": "6407261e-2993-4b60-968c-13dff4cef0d9",
+      "submission": "aristotle-in/structure-critique-minimal",
+      "output": "aristotle-out/structure-critique-minimal_aristotle",
+      "target": "structure-critique-minimal",
+      "note": "structure-proof-strategy-critique-minimal",
+      "status": "downloaded",
+      "archive": "/Users/yangd/Documents/balancedness/aristotle/aristotle-out/structure-critique-minimal_aristotle.tar.gz",
+      "solution": "/Users/yangd/Documents/balancedness/aristotle/aristotle-out/structure-critique-minimal_aristotle"
+    },
+    {
+      "id": "d5e7a944-d1ff-4c12-93bc-81dd75f12c86",
+      "submission": "aristotle-in/endToEnd_N2.lean",
+      "output": "aristotle-out/endToEnd_N2_aristotle",
+      "target": "endToEnd_N2",
+      "note": "n2-product-order-audit",
+      "status": "submitted"
+    },
+    {
+      "id": "1e2a170e-0bf8-4a97-84c5-2c70336e25eb",
+      "submission": "aristotle-in/balanced_N2.lean",
+      "output": "aristotle-out/balanced_N2_aristotle",
+      "target": "balanced_N2",
+      "note": "n2-balanced-orientation-audit",
+      "status": "submitted"
+    },
+    {
+      "id": "f555c2f8-c7f1-4449-9a6f-8dbc4bca2b3a",
+      "submission": "aristotle-in/regularizerSq_N2.lean",
+      "output": "aristotle-out/regularizerSq_N2_aristotle",
+      "target": "regularizerSq_N2",
+      "note": "n2-regularizer-expansion-audit",
+      "status": "submitted"
+    }
+  ],
+  "completed": []
+}

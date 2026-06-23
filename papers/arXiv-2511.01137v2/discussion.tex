@@ -1,0 +1,60 @@
+\section{Discussion: a new dynamic paradigm}
+Our results provide a paradigm for training dynamics illustrated in Figure~\ref{fig:reg-flow} and Figure ~\ref{fig:learn-flow}. In this idealization, we consider regularization and learning as two distinct dynamic processes. Training is assumed to take place in two stages. First, a fast regularization provides the optimal parameter description of the training data (Figure~\ref{fig:reg-flow}). This is then followed by a slower learning stage, in which the parametric representation minimizes the cost function, while staying optimal at all times (Figure~\ref{fig:learn-flow}). 
+
+This decomposition offers a conceptual framework for training dynamics that is based on the intrinsic geometry of parameter space induced by the neural architecture. It is also amenable to a rigorous analysis within the dynamical systems framework for fast-slow systems, since both the learning and regularization flow admit several explicit descriptions (see~\cite{Chen2} for solutions to the learning flow). In the framework for fast-slow analysis these idealized flows should be seen as limiting descriptions of training dynamics arising from the following models. 
+
+\subsection{Gradient flow of a regularized cost function}
+This is the gradient flow on $\Md^N$
+\begin{equation}
+    \label{eq:fast-slow1}
+    \dot{\ww} = -\nabla_\ww \left( E(X(\ww)) + \frac{\kappa}{2} \|\ww\|_2^2\right),
+\end{equation}
+where the parameter $\kappa>0$ controls the strength of the regularization. The main observation then is that this dynamical system may be naturally decomposed  at each point $\ww$ into two orthogonal flows, one normal to $\fiberX$ (learning) and the other parallel to $\fiberX$ (regularizing). Our heuristic idea is that regularization is `fast' because of the exponential rate of convergence provided by Theorem~\ref{thm:reg-flow} (note that the rate is now $2\kappa$, not $2$), so that the dynamics of equation~\eqref{eq:fast-slow1} may be rigorously approximated by the learning and regularizing flows.
+
+It is of interest to formalize the heuristic of fast-regularization and slow-learning for equation~\eqref{eq:fast-slow1} using the geometric singular perturbation theory of Fenichel~\cite{Fenichel}. 
+
+%It is of interest to formalize this heuristic of fast-regularization and slow-learning using geometric singular perturbation theory.
+
+\subsection{Regularization by background noise} \label{subsec:noise}
+It is important to note that small noise naturally provides $L^2$ regularization as follows.
+
+Fix an inverse temperature $\beta \in (0,\infty)$ and let $\bfB_t$ denote the standard Brownian motion in $\Md^N$. A natural model for background noise in the parameter space $\Md^N$ is the Ornstein-Uhlenbeck process described by the Langevin equation 
+\begin{equation}
+    \label{eq:fast-slow2}
+    d\ww_t = -\kappa \ww_t + \sqrt{\frac{2}{\beta}} d\bfB_t.
+\end{equation}
+The equilibrium measure for $\ww_t$ is the Gaussian with probability density
+\begin{equation}
+    \label{eq:fast-slow3}
+    \rho_{\beta,\kappa} (\ww) = \frac{1}{Z_{\beta,\kappa}} e^{-\beta\kappa \|\ww\|^2}, \quad Z_{\beta,\kappa} = \int_{\Md^N} e^{-\beta\kappa \|\ww\|^2} d\ww.
+\end{equation}
+We allow ourselves two parameters $(\beta,\kappa)$ to independently study the effect of the small noise ($\beta \to \infty$) and small regularizer ($\kappa\to 0)$ limits. However, it is only the product $\beta\kappa$ that determines the above density. 
+
+The background noise may be naturally included in training dynamics by studying the Langevin equation
+\begin{equation}
+    \label{eq:fast-slow4}
+    d{\ww}_t = -\left( \nabla_\ww \left( E(X(\ww_t)\right)+ \kappa \ww_t \right)\,dt  + \sqrt{\frac{2}{\beta}}\, d\bfB_t.
+\end{equation}
+The noise in this equation is isotropic. However, one may also consider anisotropic stochastic forcing that corresponds to the idealized gradient flows for regularization 
+and learning. These are Riemannian Langevin equations (RLE),
+%I added this ( ) because the "secretly Bayesian?" section uses the abbreviation "RLE"
+where the stochastic forcing corresponds to Brownian motion at inverse temperature $\beta$ on the manifolds $(\balance,\iota)$ and $(\fiberX,\iota)$. The explicit description of these equations in coordinates is quite subtle since it includes deterministic corrections by curvature. We present an analysis of this effect on $\balance$ in~\cite{MY-RLE}.  We note that geometric singular perturbation theory for noisy fast-slow systems has been recently introduced~\cite{Kuehn}. 
+
+\subsection{Is deep learning `secretly Bayesian'?}
+Theorems~\ref{thm:intro}-\ref{thm:reg-flow} along with these RLE suggests a Bayesian interpretation for deep learning. This goes as follows.
+
+Assume that $\Md^N$ is equipped with the Gaussian prior in equation~\eqref{eq:fast-slow3}. Now condition on the end-to-end matrix $X$; the posterior measure is  Gaussian measure restricted to $(\fiberX,\iota)$ yielding the partitition function
+\begin{equation}
+    \label{eq:fast-slow5}
+     \tilde{Z}_{\beta,\kappa} = \int_{\fiberX} e^{-\beta\kappa \|\ww\|^2} d\mathcal{H}^{(N-1)d^2)}(d\ww).
+\end{equation}
+Here $\mathcal{H}^{(N-1)d^2)}(d\ww)$ is the volume element obtained by restricting Lebesgue measure on $\Md^N$ to $\fiberX$. Theorem~\ref{thm:intro} then immediately implies that when the noise is small ($\beta \to \infty)$ the posterior measure is the uniform measure on $\orbitx$. In this limit, the microscopic dynamics are described by Brownian motion on $\orbitx$, which is constructed explicitly in~\cite{MY-RLE}. We may also change variables using Lemma~\ref{le:group-orbit} to rewrite $\tilde{Z}_{\beta,\kappa}$ as an integral over $\GLdC^{N-1}$ which is amendable to evaluation using representation theory (see~\cite{McSwiggen} for an introduction to similar integrals). 
+
+Both these approaches are studied in forthcoming work. While Bayesian principles in this form can only be made mathematically precise for the DLN at this time, our work is broadly inspired by the goal of developing rigorous geometric foundations for deep learning in the spirit of~\cite{Belkin-Niyogi,LeCun}. Our work to date in these directions includes a geometric decomposition of the tangent space for ReLU networks by the first author~\cite{GrigsbyLindseyPersistentPseudodimension} and a re-investigation of the Nash embedding theorems by Inauen and the second author~\cite{IM}.
+
+\subsection{Conclusion}
+ These questions reveals the power of the DLN as a phenomenological model for deep learning. While the DLN is amenable to the tools of dynamical system theory and stochastic differential geometry, each such study requires a careful geometric analysis, and seems to reveal new connections between training dynamics as studied in practice and the underlying mathematical foundations. 
+
+
+%Again, our main observation is that this stochastic dynamical system admits idealized geometric limits
+%an orthogonal decomposition at each point $\ww$ into a slow process orthogonal to $\fiberX$ (learning) and a fast process parallel to $\fiberX$ (regularizing). The interplay of the noise with the underlying foliations is quite subtle and leads to 

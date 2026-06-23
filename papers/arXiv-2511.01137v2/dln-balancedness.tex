@@ -1,0 +1,69 @@
+\documentclass[reqno]{amsart}
+%\usepackage{showkeys}
+\usepackage{lineno}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\input{header}
+\begin{document}
+
+%\linenumbers
+
+
+\title{Regularization implies balancedness in the Deep Linear Network}
+
+
+\begin{abstract}
+We use geometric invariant theory (GIT) to study the deep linear network (DLN). The Kempf-Ness theorem is used to establish that the $L^2$ regularizer is minimized on the balanced manifold. We introduce related balancing flows using the Riemannian geometry of fibers. The balancing flow defined by the  $L^2$ regularizer is shown to converge to the balanced manifold at a uniform exponential rate. The balancing flow defined by the squared moment map is computed explicitly and shown to converge globally.
+
+This framework allows us to decompose the training dynamics into two distinct gradient flows: a  regularizing flow on fibers and a learning flow on the balanced manifold. It also provides a common mathematical framework for balancedness in deep learning and linear systems theory. We use this framework to interpret balancedness in terms of fast-slow systems, model reduction and Bayesian principles. 
+
+%Further, the conservation laws for the DLN discovered by Arora, Cohen and Hazan~\cite{ACH} are shown to arise from the moment map associated to this regularizer. 
+%We also introduce a gradient flow on fibers that we term (the {\em regularizing flow\/}) to quantify the approach to the balanced manifold.
+\end{abstract}
+
+\author{Kathryn Lindsey}
+\address{Department of Mathematics, Maloney Hall, Boston College, Chestnut Hill, MA 02467-3806}
+\email{lindseka@bc.edu}
+
+
+\author{Govind Menon}
+\address{Division of Applied Mathematics, Brown University, 182 George St., Providence, RI 02912.}
+\email{govind\_menon@brown.edu}
+\curraddr{School of Mathematics, Institute for Advanced Study, 1 Einstein Drive, Princeton, NJ 08540}
+\email{gmenon@ias.edu}
+
+
+
+\thanks{KL was supported by NSF DMS \#2133822. GM 
+%This work 
+was supported by the NSF grants DMS \#2107205 and DMS \#2407055 and the Erik Ellentuck Fellow Fund at the Institute for Advanced Study.}
+
+
+\keywords{Deep linear network, Kalman's realizability theory,  parameter space symmetry}
+
+\maketitle
+%\tableofcontents
+
+{\centering \em For David Mumford. \par}
+
+
+
+\maketitle
+
+\input{intro}
+\input{reg-flow}
+\input{kempf-ness}
+\input{discussion}
+\input{acknowledgements}
+
+
+%\input{results}
+%\input{group-action}
+%\input{orbit-basis}
+%\input{balance-basis}
+
+\bibliographystyle{siam}
+\bibliography{dln-balancedness}
+
+
+\end{document}
