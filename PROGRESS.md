@@ -4,23 +4,134 @@ Running narrative of the formalization: what got done, what is next, and which
 risks remain active. Reusable proof lessons and exact Mathlib API signatures
 belong in `AGENTS.md`; this file is the story and sequencing.
 
-## Next Session - v1 is sorry-free; review + Track B
+## Current plan (babysit cycle, 2026-06-23 17:06 BST)
 
-**State.** **v1 is complete and sorry-free.** `lake build` is green end-to-end and
-`bash scripts/no_sorry.sh` passes; `#print axioms Project.main` shows no custom axioms
-(only Lean's `propext`/`Classical.choice`/`Quot.sound`). The capstone `Main.main`
-(`thm:intro`/`eq:variation1`) is a real conditional theorem modulo the single
-`KempfNessHyp` interface.
+**State.** **v1 is complete and sorry-free.** `lake build` green (8564 jobs),
+`bash scripts/no_sorry.sh` passes, `#print axioms Project.main` shows only
+`propext`/`Classical.choice`/`Quot.sound` (re-verified this cycle). The capstone
+`Main.main` (`thm:intro`/`eq:variation1`) is a real conditional theorem modulo the
+single `KempfNessHyp` interface.
 
-**Suggested next steps.** (1) Review pass — Aristotle N=2 checks and Codex critique of
-the now-complete `MomentMap.lean` analytic step. (2) Optional non-vacuity corollary
-`fiber X ∩ balanced ≠ ∅` via the SVD balanced representative (off the main path).
-(3) Track B: discharge `KempfNessHyp` (SpecialFunctions → TorusKN → ReductiveKN/polar).
-(4) `O_d^L` regularizer invariance (deferred; off the set-equality path).
+**Multi-cycle strategy.** v1 is mathematically assembled; the remaining work is
+(a) honesty/cleanup so the public docs match reality, (b) cheap regression
+insurance on the one analytic lemma, then (c) staging Track B (`O_d^L`
+invariance → discharge `KempfNessHyp`). No P0/P1/P2 issues are open.
+
+**Issue classification (this cycle, from `CRITICISMS.md`):**
+- P0 (build / gate): none. Build green, sorry-gate green.
+- P1 (wrong statement / hidden assumption): none. `KempfNessHyp` is an honest
+  explicit hypothesis (axiom-clean); statements guarded by N=2 lemmas.
+- P2 (missing core v1): none. v1 set equality is complete.
+- P3 (architecture / overbroad interface): `KempfNessHyp` quantifies over every
+  orbit though `Main` uses only `base = W`; no N=2 first-variation orientation
+  guard; `O_d^L` invariance deferred (blocks Track B).
+- P4 (stale docs / cleanup): **`README.md` lies** (claims only
+  `Project.placeholder` exists — it does not exist at all); stale "deferred to the
+  second pass" comments in `GroupAction.lean` and `MomentMap.lean`; stale
+  blocked-submission claim in `aristotle/STRUCTURE_CRITIQUE.md`; `O_d^L` listed as
+  planned in `FORMALIZATION_PLAN.md`; whole-`Mathlib` import in `Basic.lean`;
+  tracked generated `aristotle-out/` artifacts.
+
+**This cycle's work items (in order):**
+1. **[/simplify, executable now] Fix `README.md`** — replace the
+   `Project.placeholder`/"not yet created" falsehoods with the real conditional
+   Track A status (`main`/`main_regularizerSq` modulo `KempfNessHyp`, sorry-free,
+   axiom-clean). This was flagged last cycle and not fixed; it is the top item.
+2. **[/simplify] Remove stale comments** in `GroupAction.lean` (the
+   `le:group-orbit` "deferred" docstring) and `MomentMap.lean` (the two-bridge
+   "deferred" docstring); describe the proofs that now exist.
+3. **[/simplify] Fix remaining stale docs**: `aristotle/STRUCTURE_CRITIQUE.md`
+   blocked claim; mark `O_d^L` invariance deferred in `FORMALIZATION_PLAN.md`.
+4. **[/strengthen] Add the N=2 first-variation orientation audit** — an `L = 1`
+   specialization of `hasDerivAt_regularizerSq_gaugeExp` pinning the sign and
+   transpose of `∑_j 2·Tr(a_j G_j)`. Cheap insurance for the one analytic lemma;
+   provable directly, no Aristotle needed.
+5. **[/cleanup] Decide the fate of tracked `aristotle-out/` artifacts** (gitignore
+   the tree or keep a short summary); consider tightening `Basic.lean`'s import
+   in a later cycle (larger, build-time-sensitive — not this cycle).
+
+**Aristotle.** The three N=2 audit jobs (`d5e7a944` `endToEnd_N2`, `1e2a170e`
+`balanced_N2`, `f555c2f8` `regularizerSq_N2`) **all COMPLETED and downloaded**
+this cycle. Aristotle independently re-proved each from standalone definitions
+that match `Project.Basic` byte-for-byte (modulo `W₁`→`W1` naming), all
+axiom-clean (`propext`/`Classical.choice`/`Quot.sound`). This independently
+confirms the product order (`![W1,W2] ↦ W2*W1`), the balancedness orientation
+(`W1W1ᵀ = W2ᵀW2`), and the regularizer expansion are not reversed — a review-gate
+win. No code integration needed (already proved in-project). No new heavy job is
+warranted this cycle: the only unproved math (`KempfNessHyp`) is an intentional
+Track B interface, and item 4 is a direct Lean proof. The extracted outputs land
+under `aristotle/aristotle-out/{endToEnd,balanced,regularizerSq}_N2_aristotle/`
+(cleanup item: gitignore the tree). If a future cycle submits `O_d^L` invariance,
+package it as a directory with toolchain metadata.
+
+**Risks / blockers.** (1) The README lie has survived a full cycle — fixing it is
+mandatory this cycle. (2) Track B circularity risk: `KempfNessHyp` must not be
+discharged via any fiber-level minimization theorem. (3) Tightening the
+whole-Mathlib import risks long rebuilds; defer to a dedicated cycle.
 
 **Backburner - explicitly deferred.** Complex matrices, lower-rank fibers,
 Schatten `p`, L1, regularizing flows, Kirwan-Ness flow, learning-flow geometry,
-full affine GIT, and good quotients.
+full affine GIT, good quotients, and the SVD canonical-representative /
+nonemptiness corollary (`fiber X ∩ balanced ≠ ∅`).
+
+---
+
+## Session 2026-06-23 (PM) - Babysit cycle: doc-honesty pass + N=2 first-variation audit
+
+**Done (build green, sorry-gate green, `main` axiom-clean — all re-verified).**
+
+- **Aristotle N=2 audits returned and verified.** All three queued jobs completed
+  and downloaded: `d5e7a944` (`endToEnd_N2`), `1e2a170e` (`balanced_N2`),
+  `f555c2f8` (`regularizerSq_N2`). Each was proved by Aristotle from standalone
+  definitions matching `Project.Basic` byte-for-byte (modulo `W₁`→`W1`),
+  axiom-clean. Independent external confirmation that product order, balancedness
+  orientation, and regularizer expansion are not reversed. No code integration
+  needed (already proved in-project). Ledger `aristotle/aristotle-jobs.json`
+  updated by the polling script; extracts under
+  `aristotle/aristotle-out/{endToEnd,balanced,regularizerSq}_N2_aristotle/`.
+- **N=2 first-variation orientation audit added** (`/strengthen`).
+  `Project/MomentMap.lean`: `hasDerivAt_regularizerSq_gaugeExp_N2` pins the `L = 1`
+  first variation to `2·Tr(a₀·(W₁W₁ᵀ − W₂ᵀW₂))` — guarding the coefficient,
+  left-multiplication by the direction, the moment sign, and the transpose
+  placement of `le:moments` against a future refactor. Proof: specialize
+  `hasDerivAt_regularizerSq_gaugeExp` at `L = 1`, `Fin.sum_univ_one`, and
+  `simp [moment]` for the explicit moment. Companion to the `Basic.lean` N=2 gate.
+- **Documentation-honesty pass** (`/simplify`), fixing the previous cycle's
+  unfixed `CRITICISMS.md` findings:
+  - `README.md` — the P0 lie ("only `Project.placeholder` exists … target
+    declaration, not yet created") replaced with the true conditional-theorem
+    status (`main` / `main_regularizerSq`, sorry-free, axiom-clean, modulo
+    `KempfNessHyp`), corrected status table, and accurate module Layout.
+  - `Project/GroupAction.lean` — stale "`le:group-orbit` … deferred to the second
+    pass" docstring rewritten to describe the SVD-free gauge-solve that is proved.
+  - `Project/MomentMap.lean` — stale "two bridges … deferred to the second pass"
+    docstring rewritten to say both are proved from `le:moments`.
+  - `aristotle/STRUCTURE_CRITIQUE.md` — stale "submission blocked until API key"
+    claim corrected (submission works; all jobs downloaded).
+  - `FORMALIZATION_PLAN.md` — `O_d^L` invariance marked explicitly deferred in the
+    `GroupAction.lean` module plan.
+- **Docs synced.** `CRITICISMS.md` items marked FIXED/DONE with this cycle's
+  timestamp; `AGENTS.md` status block notes the new N=2 audit lemma.
+
+**Files changed.** `README.md`, `Project/GroupAction.lean` (docstring),
+`Project/MomentMap.lean` (docstring + new lemma), `aristotle/STRUCTURE_CRITIQUE.md`,
+`FORMALIZATION_PLAN.md`, `CRITICISMS.md`, `AGENTS.md`, `PROGRESS.md`,
+`aristotle/aristotle-jobs.json` (script-updated).
+
+**Declarations added.** `hasDerivAt_regularizerSq_gaugeExp_N2` (`MomentMap.lean`).
+
+**Verification.** `lake build` (8564 jobs, green), `bash scripts/no_sorry.sh`
+(green), `#print axioms Project.main` / `Project.main_regularizerSq`
+(`propext`/`Classical.choice`/`Quot.sound` only),
+`.venv/bin/python aristotle/check-aristotle.py` (3 N=2 jobs complete).
+
+**Remaining risks / blockers.** (1) Capstone still conditional on the unproved
+`KempfNessHyp` interface (Track B). (2) `KempfNessHyp` is over-broad vs. what
+`Main` uses and records provenance only in prose — localizing/field-ifying it
+needs reviewer sign-off (interface change). (3) `O_d^L` invariance still unproved
+(blocks Track B). (4) `Basic.lean` whole-`Mathlib` import (build-time-sensitive;
+deferred to a dedicated cycle). (5) Tracked generated `aristotle-out/` artifacts
+to be triaged in `/cleanup`.
 
 ---
 

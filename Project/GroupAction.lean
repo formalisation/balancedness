@@ -177,11 +177,11 @@ theorem trivialBase_mem_fiber (X : Matrix (Fin d) (Fin d) ℝ) :
 
 `fiber_subset_orbit` is Lindsey-Menon's Lemma `le:group-orbit`: when `X` is full
 rank, every point of `fiber X` is reachable from a base point by the gauge action.
-The proof is the SVD-free sequential gauge-solve and is deferred to the second
-pass (see `PROGRESS.md` for the worked-out construction): reduce to the trivial
-base via `MulAction.orbit_eq_iff`; all factors are units (`det X = ∏ det (W i)`);
-the solving gauge is the prefix product `A j = W_j ⋯ W_0`, and the top index
-closes by `X = endToEnd W = W_L · A_{L-1}`. -/
+The proof below is the SVD-free sequential gauge-solve: reduce to the trivial base
+via `MulAction.orbit_eq_iff`; all factors are units (`det X = ∏ det (W i)`,
+`factor_isUnit`); the solving gauge is the prefix product `A j = W_j ⋯ W_0`
+(`preU`), mid indices telescope `A_i A_{i-1}⁻¹ = W_i`, and the top index closes by
+`X = endToEnd W = W_L · A_{L-1}` (`mem_orbit_trivialBase`). -/
 /-- Each factor of a full-rank end-to-end product is invertible
 (`det X = ∏ det (W i)`), so a zero factor-determinant would force `det X = 0`. -/
 theorem factor_isUnit {X : Matrix (Fin d) (Fin d) ℝ} {W : Weights d L}

@@ -390,10 +390,11 @@ tower at the end (the reverse of building the KN tower first).
    capstone statement, unsquared objective definition, and the
    `regularizerSq`/`regularizer` argmin bridge; pass the `N = 2` and objective
    bridge acceptance gates.
-2. **`GroupAction.lean`** — action, product preservation, `O_d` invariance, and
-   the split orbit bridge: `orbit_subset_fiber`, `fiber_subset_orbit`
-   (`le:group-orbit`) by sequential gauge-solve, then `fiber_eq_orbit` as a
-   corollary.
+2. **`GroupAction.lean`** — action, product preservation, and the split orbit
+   bridge: `orbit_subset_fiber`, `fiber_subset_orbit` (`le:group-orbit`) by
+   sequential gauge-solve, then `fiber_eq_orbit` as a corollary. *(`O_d^L` norm
+   invariance is **deferred**: off the v1 set-equality path, needed only later to
+   discharge `KempfNessHyp` in Track B.)*
 3. **`MomentMap.lean`** — moments, `balanced ↔ G = 0`, `le:moments`, and the
    `critical ↔ balanced` bridge, plus the non-opaque
    `minimizer_imp_gaugeCritical` assembled from gauge-curve-in-fiber,

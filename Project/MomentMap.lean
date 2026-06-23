@@ -20,11 +20,13 @@ moment-map machinery (which Mathlib lacks anyway).
 * `gaugeCurve_mem_fiber` — gauge curves stay in the fiber (curve-level
   `orbit_subset_fiber`).
 * `minimizer_imp_gaugeCritical`, `gaugeCritical_iff_balanced` — the two bridges
-  consumed by `Main`. **Proofs deferred to the second pass** (see the per-lemma
-  notes): they rest on the first-variation value `le:moments`
-  `d/dt|₀ regularizerSq(exp(t•a)•W) = ∑_j 2·Tr(G_jᵀ a_j)`, the two-sided
-  first-order necessary condition, and nondegeneracy of the trace pairing
-  `⟨A,B⟩ = Tr(AᵀB)`.
+  consumed by `Main`, both **proved** below from the first-variation value
+  `le:moments` (`hasDerivAt_regularizerSq_gaugeExp`):
+  `d/dt|₀ regularizerSq(gaugeExp t a • W) = ∑_j 2·Tr(a_j G_j)`. The minimizer
+  bridge uses the two-sided first-order necessary condition
+  (`IsLocalMin.hasDerivAt_eq_zero`); the critical↔balanced bridge uses
+  nondegeneracy of the trace pairing `⟨A,B⟩ = Tr(AᵀB)`
+  (`Matrix.ext_iff_trace_mul_left`).
 -/
 
 open Matrix NormedSpace
@@ -215,6 +217,24 @@ theorem hasDerivAt_regularizerSq_gaugeExp (W : Weights d L)
   rw [hfun, hfun2, ← sum_perSummand W a]
   exact HasDerivAt.sum (fun k (_ : k ∈ Finset.univ) =>
     hasDerivAt_summand (leftGen a k) (rightGen a k) (W k))
+
+/-- **N=2 first-variation orientation audit.** A machine-checked regression guard
+(companion to `endToEnd_N2`/`balanced_N2`/`regularizerSq_N2`) pinning the sign and
+transpose orientation of `le:moments` at depth `N = 2` (`L = 1`). The first
+variation of `regularizerSq` along the single gauge curve is
+`2·Tr(a₀ · (W₁W₁ᵀ − W₂ᵀW₂))`: the coefficient `2`, the left multiplication by the
+direction `a₀`, the moment sign (`castSucc` Gram minus `succ` Gram), and the
+transpose placement (`W₁W₁ᵀ` vs `W₂ᵀW₂`) are all fixed against a future refactor.
+A wrong sign or transpose in `moment`/`hasDerivAt_regularizerSq_gaugeExp` would
+break this guard. -/
+theorem hasDerivAt_regularizerSq_gaugeExp_N2 (W₁ W₂ : Matrix (Fin d) (Fin d) ℝ)
+    (a : Fin 1 → Matrix (Fin d) (Fin d) ℝ) :
+    HasDerivAt (fun t : ℝ => regularizerSq (gaugeExp t a • ![W₁, W₂]))
+      (2 * (a 0 * (W₁ * W₁ᵀ - W₂ᵀ * W₂)).trace) 0 := by
+  have h := hasDerivAt_regularizerSq_gaugeExp (L := 1) ![W₁, W₂] a
+  have hmoment : moment (d := d) (L := 1) ![W₁, W₂] 0 = W₁ * W₁ᵀ - W₂ᵀ * W₂ := by
+    simp [moment]
+  rwa [Fin.sum_univ_one, hmoment] at h
 
 /-- The gauge curve through `W` is the identity at `t = 0`: `gaugeExp 0 a • W = W`. -/
 lemma gaugeExp_zero_smul (W : Weights d L) (a : Fin L → Matrix (Fin d) (Fin d) ℝ) :

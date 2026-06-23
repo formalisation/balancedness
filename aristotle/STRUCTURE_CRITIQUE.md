@@ -2,10 +2,13 @@
 
 This is the first Aristotle-facing review payload for the balancedness project.
 
-Status on 2026-06-22: `aristotlelib` and the `aristotle` CLI are installed in
-the project-local `.venv`. Live submission is blocked until
-`ARISTOTLE_API_KEY` is set from the dashboard. This file records the payload to
-submit once credentials are available.
+Status on 2026-06-23: `aristotlelib` and the `aristotle` CLI are installed in
+the project-local `.venv`, and live submission works from the local `.env`
+`ARISTOTLE_API_KEY`. The two structure-critique jobs and the three N=2 audit jobs
+(`endToEnd_N2`, `balanced_N2`, `regularizerSq_N2`) have all been submitted and
+downloaded; the N=2 audits independently re-proved the orientation-critical
+statements (see `aristotle/aristotle-jobs.json` and `PROGRESS.md`). This file
+records the original structure-critique payload for reference.
 
 ## What Aristotle Can Check
 

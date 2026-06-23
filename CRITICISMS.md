@@ -1,269 +1,262 @@
 # Criticisms
 
-Audit timestamp: 2026-06-23 15:42:03 BST.
+Audit timestamp: 2026-06-23 17:06:10 BST.
 
-This is an adversarial review of the current Lean code after the claimed v1
-completion. The local Lean core is much better than the old skeleton critique:
-the gauge action is concrete, the orbit/fiber bridge is proved, the
-first-variation computation is proved, and the squared/unsquared bridge exists.
-That does not make the formalization acceptable. It is still a conditional
-theorem whose only unproved mathematical input is the largest theorem in the
-story, and the documentation is stale in several places.
+Hostile re-review after the previous (15:42 BST) audit. The Lean core for Track A
+is genuinely non-trivial and builds clean, but this is **not** an accepted
+formalization of Lindsey-Menon, and — damningly — the previous audit's two most
+embarrassing findings (a public `README.md` that lies about the entire project
+status, and stale "deferred to the second pass" comments sitting directly above
+the proofs they claim are missing) are **still unfixed**. A review cycle that
+re-flags the same documentation lies without fixing them is not making progress.
 
 ## 0. Build / Local Status
 
-Local status:
+- `lake build`: PASS — `Build completed successfully (8564 jobs)`.
+- `bash scripts/no_sorry.sh`: PASS — `sorry-gate: OK (no
+  sorry/admit/native_decide/axiom in Project/)`.
+- `#print axioms Project.main` / `Project.main_regularizerSq`: only `propext`,
+  `Classical.choice`, `Quot.sound`. No custom axioms. Re-verified this cycle.
+- `git status`: clean except `state.md` (babysit scratch). `.git` IS present
+  here (the previous audit wrongly claimed it was missing — that earlier claim
+  was itself a status error).
+- No `.github/` directory: GitHub Actions CI is not configured in this checkout.
+  The only oracle is local `lake build` + `no_sorry.sh`.
 
-- `lake build` passed: `Build completed successfully (8564 jobs)`.
-- `bash scripts/no_sorry.sh` passed: no `sorry`/`admit`/`native_decide`/`axiom`
-  under `Project/`.
-- `python3 scripts/check_example.py` passed: `max residual = 2.220e-16`.
-- `git status --short` failed because this checkout has no `.git` directory at
-  `/Users/yangd/Documents/balancedness`; git status is therefore unavailable.
-- No `.github` directory exists, so GitHub Actions CI is not configured in this
-  checkout.
-
-Aristotle:
-
-- Polled the two old structure critique jobs. Both are now downloaded.
-- Prepared standalone N=2 audit inputs:
-  `aristotle/aristotle-in/endToEnd_N2.lean`,
-  `aristotle/aristotle-in/balanced_N2.lean`,
-  `aristotle/aristotle-in/regularizerSq_N2.lean`.
-- Each standalone file typechecks locally, with only the intentional target
-  `sorry` warning.
-- Submitted those three jobs:
-  `d5e7a944` (`endToEnd_N2`), `1e2a170e` (`balanced_N2`), and `f555c2f8`
-  (`regularizerSq_N2`). They were queued/running at the audit time.
-- The submit wrapper warns that single-file submissions lack `lean-toolchain`
-  and `.lake` metadata. That is a workflow defect; future Aristotle submissions
-  should be directory submissions with explicit toolchain/dependency files.
+No P0 build regressions. The P0s below are documentation/honesty, which for a
+formalization whose entire value proposition is trust are not cosmetic.
 
 ## 1. Sorry's
 
-I found no `sorry` in `Project/`.
+No `sorry` in `Project/`. Confirmed by `no_sorry.sh` and by inspection of all
+five modules.
 
-The new Aristotle input files outside `Project/` intentionally contain exactly
-one `sorry` each as the proof target. These are not integrated project code.
-Their statements are already proved in `Project.Basic`, so Aristotle proving the
-negation would indict either the standalone extraction or a serious mismatch
-between the standalone definitions and the project definitions. The worst-case
-scenario is an orientation error in the public definitions, but the in-project
-N=2 lemmas already reduce that risk.
+The three N=2 audit files under `aristotle/aristotle-in/` each carry one
+intentional target `sorry`; they are git-ignored (`.gitignore` excludes
+`aristotle/aristotle-in/**/*.lean`) and not part of the build. Their statements
+are already proved in `Project.Basic` (`endToEnd_N2`, `balanced_N2`,
+`regularizerSq_N2`), so they are redundant as proof targets — their only value is
+an *independent* re-derivation by Aristotle. Those three jobs are still
+`submitted` (queued) per `aristotle/aristotle-jobs.json` and have produced
+nothing; until they return, they buy zero additional assurance.
 
 ## 2. Hidden Axioms
 
-I found no `admit`, declared `axiom`, `native_decide`, suspicious
-`Decidable.decide`, or `unsafe` in `Project/`.
+No `admit`, declared `axiom`, `native_decide`, suspicious `Decidable.decide`, or
+`unsafe` under `Project/`. Axiom check re-run this cycle (see §0).
 
-`#print axioms` results:
-
-- `Project.main`: `propext`, `Classical.choice`, `Quot.sound`.
-- `Project.main_regularizerSq`: `propext`, `Classical.choice`, `Quot.sound`.
-- `Project.KempfNessHyp`: `propext`, `Classical.choice`, `Quot.sound`.
-- `Project.fiber_eq_orbit`: `propext`, `Classical.choice`, `Quot.sound`.
-- `Project.hasDerivAt_regularizerSq_gaugeExp`: `propext`, `Classical.choice`,
-  `Quot.sound`.
-- `Project.minimizer_imp_gaugeCritical`: `propext`, `Classical.choice`,
-  `Quot.sound`.
-- `Project.gaugeCritical_iff_balanced`: `propext`, `Classical.choice`,
-  `Quot.sound`.
-
-`KempfNessHyp` is an explicit theorem parameter, not a custom axiom. That is
-better than lying with an axiom, but it is still a black-box assumption. Any
-unqualified claim that the repository proves Lindsey-Menon unconditionally is
-false.
+`KempfNessHyp` is an explicit `structure ... : Prop` hypothesis threaded through
+`main`/`main_regularizerSq`, not a Lean `axiom`. That is the honest encoding. But
+it remains the single largest mathematical input of the entire paper, unproved.
+**Any claim that this repo proves Lindsey-Menon unconditionally is false**, and
+the README must say so where users actually read it (it currently says something
+far worse — see §7).
 
 ## 3. Circularity
 
-I found no circularity in `Project.Main.main`.
+No circularity in Lean's dependency graph for `Project.main`:
 
-The dependency chain is visible:
-
-- `argmin subset balanced`: `minimizer_imp_gaugeCritical` plus
-  `gaugeCritical_iff_balanced`; no Kempf-Ness.
-- `balanced subset argmin`: `gaugeCritical_iff_balanced`, then
+- `argmin ⊆ balanced`: `minimizer_imp_gaugeCritical` then
+  `gaugeCritical_iff_balanced`. No Kempf-Ness.
+- `balanced ⊆ argmin`: `gaugeCritical_iff_balanced`, then
   `kn.critical_imp_min_on_orbit`, then `fiber_subset_orbit`.
-- `fiber_subset_orbit` is the hard `le:group-orbit` step and is proved in
-  `GroupAction.lean`; `KempfNessHyp` does not hide it.
-- The main set equality constructs no balanced representative and does not use
-  SVD.
+- `fiber_subset_orbit` (the hard `le:group-orbit` step) is genuinely proved in
+  `GroupAction.lean` via `mem_orbit_trivialBase` (SVD-free sequential
+  gauge-solve). `KempfNessHyp` does not hide it.
+- The set equality builds no representative and uses no SVD.
 
-The remaining circularity risk is not in Lean's dependency graph. It is in the
-future discharge of `KempfNessHyp`: if Track B proves the interface by assuming
-the DLN balancedness theorem, or by importing a fiber-level minimization theorem,
-the whole project becomes circular. The current interface shape prevents the
-most obvious fiber-level cheat, but it cannot police the future proof.
+The unpoliceable risk is Track B: if `KempfNessHyp` is later discharged by
+assuming a fiber-level minimization theorem (or the balancedness theorem
+itself), the whole edifice becomes circular. The orbit-level interface shape
+blocks the most obvious cheat but cannot constrain a future proof. This is a
+standing risk, not a current defect.
 
 ## 4. Hypothesis Audit
 
-`Project.main` hypotheses:
-
-- `hX : FullRank X`. Necessary for the current `fiber_subset_orbit` proof. This
-  is faithful to v1 and to the paper's stated theorem, but it is stronger than
-  the broader mathematical ambition: lower-rank fibers and orbit closures are
-  deliberately excluded.
-- `kn : KempfNessHyp d L`. Necessary for v1 as a conditional theorem. It is too
-  coarse as a formal interface because the real-reductive group, maximal compact
-  subgroup, closed-orbit/properness context, `O_d^L` invariance, and
-  length-function identification live only in prose.
-- Fiber membership in the pointwise inclusions. Necessary and not suspicious.
-- Gauge criticality. Defined concretely by `HasDerivAt` of gauge curves, not by
-  balancedness or minimality. This avoids the old skeleton failure mode.
-- Differentiability. No longer a hidden hypothesis: it is supplied by
-  `hasDerivAt_regularizerSq_gaugeExp`. Good, but the proof is specialized to
-  real square matrices and the current Frobenius topology workaround.
-
-`KempfNessHyp` itself is stronger than what `Main` actually consumes. `Main`
-uses it only at `base = W` for a full-rank fiber point `W`, but the field
-quantifies over every orbit. That makes the interface convenient but broader
-than the capstone requires.
+- `hX : FullRank X` (= `IsUnit X`). Necessary for `factor_isUnit` /
+  `mem_orbit_trivialBase`. Faithful to the paper's full-rank theorem, but
+  strictly stronger than the broader ambition (lower-rank fibers, orbit
+  closures) which v1 deliberately excludes.
+- `kn : KempfNessHyp d L`. Necessary for v1 as a conditional theorem, but
+  **over-broad**: the field `critical_imp_min_on_orbit` quantifies over *every*
+  `base` and every orbit, whereas `main` instantiates it exactly once at
+  `base = W` for a full-rank fiber point. A faithful interface would be localized
+  to the full-rank / closed-orbit situation actually used, making the eventual
+  Track B obligation honest about what must be proved. As written, it is
+  convenient for `Main` and harder than necessary to discharge.
+- `KempfNessHyp` provenance (real reductive `(GL_d ℝ)^L`, maximal compact
+  `O_d^L`, `K`-invariance of `regularizerSq`, identification with the KN length
+  function) lives only in the docstring, **not in fields**. Lean cannot tell
+  "proved by Richardson-Slodowy" from "asserted by a same-typed theorem". A
+  reviewer cannot trust prose to prevent the complex KN theorem being substituted
+  for the real one during Track B.
+- Fiber membership and gauge criticality: necessary and not suspicious. Gauge
+  criticality is defined from `HasDerivAt` of gauge curves
+  (`GaugeCritical`), independently of balancedness — `gaugeCritical_iff_balanced`
+  is a real bridge, not a definitional restatement. Good.
+- Differentiability is supplied (not assumed) by
+  `hasDerivAt_regularizerSq_gaugeExp`. Good, but specialized to real square
+  matrices and the Frobenius-topology workaround.
 
 ## 5. Mathematical Correctness
 
-I found no current Lean-level mismatch in the DLN-specific Track A statements:
+No Lean-level mismatch found in the DLN-specific Track A statements:
 
-- Product order is guarded by `endToEnd_N2`.
-- Balancedness orientation is guarded by `balanced_N2`.
-- The paper's ridge norm is indeed the joint Frobenius norm:
-  `||W||_2^2 = sum_k Tr(W_k^* W_k)`, so the `sqrt` bridge is the correct bridge.
-- The first variation is proved for `regularizerSq`, and the paper objective is
-  reached only through `argmin_regularizerSq_eq_argmin_regularizer`.
-- The real-vs-complex caveat is documented in `MomentMap.lean` and
-  `KempfNess.lean`.
+- Product order guarded by `endToEnd_N2` (`![W₁,W₂] ↦ W₂*W₁`).
+- Balancedness orientation guarded by `balanced_N2` (`W₁W₁ᵀ = W₂ᵀW₂`).
+- Ridge norm is the joint Frobenius norm; the `sqrt` bridge
+  (`isMinOn_regularizerSq_iff_regularizer`,
+  `argmin_regularizerSq_eq_argmin_regularizer`) is the correct route to the
+  unsquared `eq:variation1`.
+- First variation proved for `regularizerSq` only; the paper objective is reached
+  only through the bridge. Matches the invariant "never differentiate the
+  unsquared norm".
 
-Real problems remain:
+Real gaps remain:
 
-- `O_d^L` invariance (`eq:group-action2`) is only documented and explicitly
-  deferred. It is not needed by `Main` because `Main` assumes `KempfNessHyp`, but
-  it is a required hypothesis for actually proving `KempfNessHyp`.
-- `KempfNessHyp` records real Slodowy provenance in a docstring, not in fields.
-  Lean cannot distinguish "proved by the real Richardson-Slodowy theorem" from
-  "asserted by a theorem with the same type".
-- There is no standalone first-variation N=2 orientation audit. The project has
-  the full `le:moments` theorem, but a small N=2 audit would be a cheap guard
-  against a future sign/transpose refactor.
-- The proof of `le:group-orbit` uses the trivial base instead of the paper's SVD
-  center. This is mathematically fine for the set equality, but the paper's
-  Occam/canonical-representative interpretation is not formalized.
+- `O_d^L` invariance (`eq:group-action2`) is only documented and deferred. Not
+  needed by `main` (which assumes `KempfNessHyp`), but it is a *required input*
+  to ever prove `KempfNessHyp`. Until it exists, Track B is not even staged.
+- **N=2 first-variation orientation audit. [FIXED 2026-06-23 17:06 cycle.]**
+  `hasDerivAt_regularizerSq_gaugeExp_N2` (in `MomentMap.lean`) now pins the `L = 1`
+  first variation to `2·Tr(a₀·(W₁W₁ᵀ − W₂ᵀW₂))`: coefficient, left-multiplication
+  by the direction, moment sign, and transpose placement are all guarded against a
+  future refactor. Additionally corroborated externally by the three completed
+  Aristotle N=2 audits of the underlying definitions.
+- `le:group-orbit` is proved from `trivialBase = (X,1,…,1)`, not the paper's SVD
+  center. Fine for the set equality, but the Occam/canonical-representative
+  reading (and `fiber X ∩ balanced ≠ ∅`) is not formalized.
 
 ## 6. Code Quality
 
-No file under `Project/` exceeds 600 lines. I found no `set_option
-maxHeartbeats` above 800000. No generated Aristotle proof has been pasted into
-the project.
+No file exceeds 600 lines (largest: `GroupAction.lean` 281, `MomentMap.lean`
+279). No `set_option maxHeartbeats`. No generated Aristotle proof pasted into
+`Project/`.
 
-Open code-quality issues:
+Open issues:
 
-- `Project/Basic.lean` imports all of `Mathlib`. That was acceptable for
-  bootstrapping, but it is a future maintenance liability. The import graph
-  should be tightened now that the proof shape is known.
-- `Project/GroupAction.lean` still says the `fiber_subset_orbit` proof is
-  "deferred to the second pass" even though it is proved. That is stale code
-  documentation in a theorem-critical file.
-- `Project/MomentMap.lean` still says the two MomentMap bridge proofs are
-  "deferred to the second pass" even though they are proved. This is exactly the
-  kind of stale comment that makes reviewers distrust status claims.
-- The single-file Aristotle submission path is under-specified: it submits only
-  a `.lean` file, so Aristotle warns about missing `lean-toolchain` and `.lake`.
-  Use directory submissions for serious proof obligations.
-- The proof scripts are highly specialized to `Fin`, `Matrix`, and trace API
-  details. That is understandable, but several helper lemmas are Mathlib-shaped
-  and should not remain trapped in this project forever.
+- **`Project/Basic.lean` line 1: `import Mathlib`.** Whole-Mathlib import. The
+  proof shape is now fully known; this should be tightened to granular imports.
+  Every downstream module inherits it transitively, so the entire build pays for
+  it. Maintenance liability and a slow-build tax.
+- **Stale tracked Aristotle outputs.** `git ls-files` shows the *completed*
+  `structure-critique` and `structure-critique-minimal` job outputs
+  (`ARISTOTLE_SUMMARY.md`, `structure-critique-response.md`, `lake-manifest.json`,
+  toolchains, etc.) committed under `aristotle/aristotle-out/...`. These are
+  generated artifacts from one-off planning jobs; keeping them in version control
+  is clutter and risks confusing future readers about what is source vs. output.
+  Decide: either gitignore the whole `aristotle-out/` tree (consistent with the
+  existing `*.lean`/`*.tar.gz` ignores) or keep only a short human summary.
+- The Aristotle single-file submission path (`endToEnd_N2.lean`, etc.) submits a
+  bare `.lean` with no `lean-toolchain`/`.lake` metadata; the wrapper warns about
+  this. Serious proof obligations must be directory submissions with explicit
+  toolchain/dependency files. The N=2 jobs were submitted the under-specified way.
+- Helper lemmas (`reverseProd_conjChain`, `preU`/`preU_succ`/`coe_preU_full`,
+  `factor_isUnit`, `traceCLM`/`transCLM`) are Mathlib-shaped but trapped in this
+  project (see §9).
 
 ## 7. Documentation Lies
 
-I found real documentation discrepancies:
+These are the gating defects. Two were flagged in the previous audit and **not
+fixed** — re-flagging them is not progress; fixing them is.
 
-- `README.md` lines 14-22 are false. They say only `Project.placeholder` exists
-  and the target declaration has not been created. In reality,
-  `Project.main` and `Project.main_regularizerSq` exist and build.
-- `Project/GroupAction.lean` lines 176-184 are stale. The comment says the hard
-  orbit proof is deferred; it is now proved in the same file.
-- `Project/MomentMap.lean` lines 22-27 are stale. The module docstring says
-  `minimizer_imp_gaugeCritical` and `gaugeCritical_iff_balanced` are deferred;
-  they are now proved.
-- `aristotle/STRUCTURE_CRITIQUE.md` says live submission is blocked until
-  `ARISTOTLE_API_KEY` is set. The local `.env` works; jobs were submitted and
-  polled in this audit.
-- The historical part of `PROGRESS.md` still says the full structure-critique
-  Aristotle job is "still running"; it has now been downloaded. Historical logs
-  can stay chronological, but the current top section should mention that the
-  old full critique is no longer pending and that the N=2 jobs are now queued.
-- `CRITICISMS.md` was badly stale before this audit: it still said no
-  mathematical result from the paper had been proved. That is now corrected
-  here, but the stale README means public-facing status is still dishonest.
+- **P0 — `README.md` lies. [FIXED 2026-06-23 17:06 cycle.]** Was: "only the
+  template theorem `Project.placeholder` exists. No mathematical theorem from the
+  paper has been formalized yet." + "target declaration, not yet created". Now
+  rewritten to state the real conditional-theorem status (`main` /
+  `main_regularizerSq`, sorry-free, axiom-clean, modulo `KempfNessHyp`) with a
+  corrected status table and module Layout. Verified `lake build` green after.
+- **P1 — `Project/GroupAction.lean` stale `le:group-orbit` docstring.
+  [FIXED 2026-06-23 17:06 cycle.]** Rewritten to describe the proof that exists
+  (`factor_isUnit`/`preU`/`mem_orbit_trivialBase`/`fiber_subset_orbit`), no longer
+  "deferred to the second pass".
+- **P1 — `Project/MomentMap.lean` stale two-bridge docstring.
+  [FIXED 2026-06-23 17:06 cycle.]** Rewritten to say both bridges are proved below
+  from `le:moments`, naming the mechanisms (`IsLocalMin.hasDerivAt_eq_zero`,
+  `Matrix.ext_iff_trace_mul_left`).
+- **P2 — `aristotle/STRUCTURE_CRITIQUE.md` blocked-submission claim.
+  [FIXED 2026-06-23 17:06 cycle.]** Updated to record that submission works from
+  local `.env` and that the structure + three N=2 jobs are all downloaded.
+- **P2 — `FORMALIZATION_PLAN.md` `O_d^L` listed as planned/done.
+  [FIXED 2026-06-23 17:06 cycle.]** Module plan now marks `O_d^L` invariance
+  explicitly deferred (off the v1 set-equality path; Track B input).
+- `PROGRESS.md` top section: acceptable now (it notes v1 complete and sorry-free),
+  but it does not mention that the N=2 Aristotle jobs are queued/unreturned or
+  that the structure jobs are downloaded. Minor.
 
-I found no issue in `AGENTS.md`'s current status block: it matches the build and
-axiom checks from this audit. `FORMALIZATION_PLAN.md` also matches the current
-architecture well enough, though it still lists `O_d^L` invariance in the module
-plan despite that proof being deferred.
+`AGENTS.md` status block matches the build/axiom reality — no issue found there.
 
 ## 8. Generalization Opportunities
 
 Ranked by feasibility:
 
-1. Formalize `O_d^L` invariance of `regularizerSq`. This is low-to-medium risk
-   and directly supports the future proof of `KempfNessHyp`.
-2. Add a nonemptiness/canonical-representative corollary
-   `fiber X ∩ balanced ≠ ∅` using the SVD center. This is off the set-equality
-   path but needed for the Occam interpretation.
-3. Add a tiny N=2 first-variation audit lemma checking the sign and transpose of
-   the moment formula. This is cheap insurance against the most dangerous
-   orientation regression.
-4. Localize `KempfNessHyp` to the exact full-rank or closed-orbit situation used
-   by `Main`, or add formal fields for the KN dictionary (`K`-invariance,
-   reductive group, length-function identity). This improves honesty but may
-   make Track B harder to state.
-5. Extend from real matrices to complex matrices. The source treats complex
-   first; the current Lean v1 intentionally avoids it.
-6. Attack lower-rank fibers via orbit closures/nullcone stratification. This is
-   mathematically important and much harder than v1.
-7. Generalize regularizers: Schatten `p` for `1 < p < infinity`, then investigate
-   the deliberately excluded `p = 1` case. Do not stub these.
+1. **N=2 first-variation audit lemma** (cheapest, do now). A guard
+   `hasDerivAt_regularizerSq_gaugeExp` at `L = 1` pinning
+   `∑_j 2·Tr(a_j G_j)` sign/transpose. Pure regression insurance, low risk.
+2. **Localize `KempfNessHyp`** to the full-rank/closed-orbit case `Main` uses, or
+   add formal fields for the KN dictionary (`O_d^L` invariance, reductive group,
+   length-function identity). Improves honesty; may make Track B statement harder.
+3. **`O_d^L` invariance of `regularizerSq`** (`eq:group-action2`). Low-to-medium
+   risk, directly supports discharging `KempfNessHyp`.
+4. **Nonemptiness / canonical-representative corollary** `fiber X ∩ balanced ≠ ∅`
+   via the SVD center. Off the set-equality path; needed for the Occam reading.
+5. **Complex matrices.** The source treats `ℂ` first; v1 intentionally avoids it.
+   Requires conjugate-transpose moment map and complex KN.
+6. **Lower-rank fibers** via orbit closures / nullcone stratification. Much harder
+   than v1.
+7. **Schatten `p` regularizers** for `1 < p < ∞`, then the excluded `p = 1`. Do
+   not stub.
 
 ## 9. Mathlib Upstreamability
 
-Specific candidates:
-
-- `reverseProd_conjChain`: a clean noncommutative telescoping lemma for reversed
-  products of conjugated chains. This should be generalized away from matrices
-  and `GL` if it is upstreamed.
-- Prefix product lemmas around `List.ofFn`, `take`, `reverse`, and coercion of
-  products of units. The current `preU_succ`/`coe_preU_full` pattern is
-  broadly useful but too project-specific as written.
-- Matrix determinant/list-product facts used in `factor_isUnit`. Mathlib has
-  the ingredients; a packaged lemma saying every factor in a finite matrix
-  product is invertible when the product is invertible over a field would be
-  useful.
-- Frobenius-continuous trace and transpose CLMs. `traceCLM` and `transCLM` are
-  local wrappers around existing linear maps; Mathlib could expose canonical
-  continuous-linear versions under the Frobenius norm.
-- Matrix exponential derivative examples/lemmas under the Frobenius topology.
-  The current proof found a real API trap: matrix-valued `HasDerivAt` statements
-  can pick the wrong topology. Mathlib documentation or wrapper lemmas should
-  make the safe path obvious.
-- Trace-pairing nondegeneracy workflows. `Matrix.ext_iff_trace_mul_left` is the
-  key lemma, but a named Frobenius/trace-pairing nondegeneracy theorem over
-  finite matrices would make proofs like `gaugeCritical_iff_balanced` clearer.
+- `reverseProd_conjChain`: clean noncommutative telescoping of reversed products
+  of conjugated chains. Generalize off `Matrix`/`GL` (any monoid + units) to
+  upstream.
+- `preU`/`preU_succ`/`coe_preU_full`: prefix-product-of-units lemmas over
+  `List.ofFn`/`take`/`reverse`. Broadly useful; currently too project-specific.
+- `factor_isUnit`: "every factor of an invertible finite matrix product over a
+  field is invertible" — Mathlib has the pieces; a packaged lemma would be useful.
+- `traceCLM`/`transCLM`: Frobenius-continuous trace and transpose as CLMs. Mathlib
+  could expose canonical continuous-linear versions under the Frobenius norm.
+- Matrix exponential derivative under the Frobenius topology: the proof hit a real
+  instance-diamond trap (default Pi vs. Frobenius topology). A documented wrapper
+  lemma / `HasDerivAt` example would save the next person the same workaround.
+- Trace-pairing nondegeneracy: `Matrix.ext_iff_trace_mul_left` drives
+  `gaugeCritical_iff_balanced`; a named Frobenius/trace-pairing nondegeneracy
+  theorem over finite matrices would clarify such proofs.
 
 ## Verdict
 
 REVISE.
 
-The Lean core for Track A is not fake: it builds, has no project sorries, uses
-only standard axioms, proves the DLN-specific orbit and moment calculations, and
-keeps Kempf-Ness orbit-level. But it is not acceptable as a completed
-formalization of Lindsey-Menon. Acceptance requires, at minimum:
+The Track A Lean core is real: it builds, has no project sorries, uses only
+standard axioms, proves the DLN-specific orbit and moment calculations, and keeps
+Kempf-Ness orbit-level and SVD-free. It is a strong *conditional* formalization.
+It is **not** the theorem, and it is not acceptable while its public-facing
+documentation describes an empty repository.
 
-1. Fix the stale public documentation, especially `README.md` and the stale
-   module comments in `GroupAction.lean` and `MomentMap.lean`.
-2. Package Aristotle submissions with explicit toolchain/dependency metadata and
-   process the three queued N=2 audit jobs.
-3. Prove or formally expose the `O_d^L` invariance and the real KN dictionary
-   obligations needed to discharge `KempfNessHyp`.
-4. Eventually discharge `KempfNessHyp` itself, or keep every theorem and document
-   brutally explicit that the result is conditional on that unproved interface.
+Conditions for acceptance (all must be fixed):
 
-Until those conditions are met, the repository is a strong conditional Track A
-formalization, not the theorem.
+1. **[P0] DONE (this cycle).** `README.md` rewritten to state the real
+   conditional Track A status modulo `KempfNessHyp`; placeholder lies deleted.
+2. **[P1] DONE (this cycle).** Stale "deferred to the second pass" comments in
+   `GroupAction.lean` and `MomentMap.lean` rewritten to describe the proofs.
+3. **[P2] DONE (this cycle).** `aristotle/STRUCTURE_CRITIQUE.md` blocked claim
+   fixed; `O_d^L` invariance marked deferred in `FORMALIZATION_PLAN.md`.
+4. **[strengthen] DONE (this cycle).** N=2 first-variation orientation audit
+   lemma `hasDerivAt_regularizerSq_gaugeExp_N2` added and proved; `lake build` +
+   sorry-gate green. Externally corroborated by the completed Aristotle N=2 audits.
+5. **[code quality] PARTIAL.** Tracked `aristotle-out/` generated artifacts
+   **DONE (this cycle)**: the whole output tree is now gitignored (except
+   `.gitkeep`) and the previously-committed structure-critique outputs were
+   untracked via `git rm --cached` (files preserved on disk). Still OPEN:
+   tighten `Project/Basic.lean`'s whole-`Mathlib` import (deferred to a dedicated
+   cycle — build-time-sensitive).
+6. **[interface honesty]** Localize `KempfNessHyp` or add formal KN-dictionary
+   fields; eventually discharge it or keep every claim brutally explicit that the
+   result is conditional on it.
+7. **[Aristotle]** Re-submit the N=2 audits as directory packages with toolchain
+   metadata; process the three queued jobs.
+
+Until at least conditions 1-4 are met, this remains a strong conditional Track A
+formalization, not the Lindsey-Menon theorem.

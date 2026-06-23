@@ -14,7 +14,7 @@ __pycache__/
 # Generated Aristotle submissions and outputs.
 /aristotle/aristotle-in/*.lean
 /aristotle/aristotle-in/**/*.lean
-/aristotle/aristotle-out/*.lean
-/aristotle/aristotle-out/**/*.lean
-/aristotle/aristotle-out/*.zip
-/aristotle/aristotle-out/*.tar.gz
+# All downloaded Aristotle outputs are generated artifacts: ignore the whole tree
+# (the job ledger aristotle/aristotle-jobs.json is the authoritative record).
+/aristotle/aristotle-out/*
+!/aristotle/aristotle-out/.gitkeep

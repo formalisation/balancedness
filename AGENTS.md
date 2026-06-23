@@ -23,6 +23,8 @@ Current state (sorry-free, `lake build` + `no_sorry.sh` green):
   and now the full analytic step **`le:moments`** (`hasDerivAt_regularizerSq_gaugeExp`:
   `d/dt|₀ regularizerSq(gaugeExp t a • W) = ∑_j 2·Tr(a_j G_j)`) plus both bridges
   `minimizer_imp_gaugeCritical` and `gaugeCritical_iff_balanced` — **sorry-free**.
+  Also `hasDerivAt_regularizerSq_gaugeExp_N2`, the N=2 first-variation orientation
+  guard (`2·Tr(a₀·(W₁W₁ᵀ − W₂ᵀW₂))`), companion to the `Basic.lean` N=2 gate.
 - `Project/KempfNess.lean`, `Main.lean` — `Main.main` (`eq:variation1`) assembles against
   the `KempfNessHyp` interface. **v1 is complete and sorry-free** (`lake build` +
   `no_sorry.sh` green); `main` carries no custom axioms. `O_d^L` invariance still deferred

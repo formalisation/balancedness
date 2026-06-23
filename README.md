@@ -11,15 +11,21 @@ and [`papers/kempf-ness-proof-sketches.md`](papers/kempf-ness-proof-sketches.md)
 
 ## What Is Formalized
 
-Current Lean state: only the template theorem `Project.placeholder` exists. No
-mathematical theorem from the paper has been formalized yet.
-
-The first target is the real, full-rank DLN minimization theorem, stated in v1
-modulo one named Kempf-Ness interface `KempfNessHyp`:
+Current Lean state: **v1 is assembled, sorry-free, and axiom-clean.** The
+capstone `Project.main` (and its smooth squared-objective form
+`Project.main_regularizerSq`) builds end-to-end; `bash scripts/no_sorry.sh`
+passes, and `#print axioms Project.main` reports only Lean's standard axioms
+(`propext`, `Classical.choice`, `Quot.sound`). It is an **honest conditional
+theorem**: the only unproved mathematical input is the named, orbit-level
+Kempf-Ness interface `Project.KempfNessHyp`, threaded as an explicit hypothesis
+(not a Lean `axiom`). The repository does **not** yet prove Lindsey-Menon
+unconditionally — discharging `KempfNessHyp` is Track B / post-v1.
 
 | Result | Statement | Source ref | Lean |
 | --- | --- | --- | --- |
-| Real full-rank L2 balancedness theorem | `argmin_{W in fiber X} ||W||_2 = fiber X intersection balanced` for full-rank `X` over `R`, conditional on `KempfNessHyp` in v1 | Theorem `thm:intro`, Eq. `eq:variation1` | target declaration, not yet created |
+| Real full-rank L2 balancedness theorem | `argmin_{W in fiber X} ||W||_2 = fiber X intersection balanced` for full-rank `X`, conditional on `KempfNessHyp` | Theorem `thm:intro`, Eq. `eq:variation1` | `Project.main` (sorry-free, axiom-clean) |
+| Squared-objective form | same equality for the smooth `regularizerSq` objective, transported to `||·||_2` via the `sqrt` bridge | Eq. `eq:variation1` | `Project.main_regularizerSq` |
+| Kempf-Ness interface | orbit-level `critical ⇒ min on orbit` (KN Theorem 0.1(a)), the single black-box input | `papers/kempf-ness.tex`, `thm:kn2 (1)` | `Project.KempfNessHyp` (explicit hypothesis) |
 
 Source definitions to match in the first Lean module:
 
@@ -64,9 +70,12 @@ python3 scripts/check_example.py
 ## Layout
 
 ```text
-Project.lean                       root module
-Project/Basic.lean                 core definitions + headline statement
-Project/...                        later modules, one topic per file
+Project.lean                       root module (imports all of the below)
+Project/Basic.lean                 core DLN objects, conventions, N=2 gate, sqrt bridge
+Project/GroupAction.lean           gauge action, orbit/fiber bridge (le:group-orbit)
+Project/MomentMap.lean             moments, first variation (le:moments), critical ↔ balanced
+Project/KempfNess.lean             the KempfNessHyp interface (single black-box input)
+Project/Main.lean                  the headline theorem main / main_regularizerSq
 papers/                            primary source, edited notes, background
 scripts/no_sorry.sh                proof-gap / axiom gate
 scripts/check_example.py           numerical sanity-check template

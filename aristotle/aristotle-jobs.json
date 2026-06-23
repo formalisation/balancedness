@@ -26,7 +26,9 @@
       "output": "aristotle-out/endToEnd_N2_aristotle",
       "target": "endToEnd_N2",
       "note": "n2-product-order-audit",
-      "status": "submitted"
+      "status": "downloaded",
+      "archive": "/Users/yangd/Documents/balancedness/aristotle/aristotle-out/endToEnd_N2_aristotle.tar.gz",
+      "solution": "/Users/yangd/Documents/balancedness/aristotle/aristotle-out/endToEnd_N2_aristotle"
     },
     {
       "id": "1e2a170e-0bf8-4a97-84c5-2c70336e25eb",
@@ -34,7 +36,9 @@
       "output": "aristotle-out/balanced_N2_aristotle",
       "target": "balanced_N2",
       "note": "n2-balanced-orientation-audit",
-      "status": "submitted"
+      "status": "downloaded",
+      "archive": "/Users/yangd/Documents/balancedness/aristotle/aristotle-out/balanced_N2_aristotle.tar.gz",
+      "solution": "/Users/yangd/Documents/balancedness/aristotle/aristotle-out/balanced_N2_aristotle"
     },
     {
       "id": "f555c2f8-c7f1-4449-9a6f-8dbc4bca2b3a",
@@ -42,7 +46,9 @@
       "output": "aristotle-out/regularizerSq_N2_aristotle",
       "target": "regularizerSq_N2",
       "note": "n2-regularizer-expansion-audit",
-      "status": "submitted"
+      "status": "downloaded",
+      "archive": "/Users/yangd/Documents/balancedness/aristotle/aristotle-out/regularizerSq_N2_aristotle.tar.gz",
+      "solution": "/Users/yangd/Documents/balancedness/aristotle/aristotle-out/regularizerSq_N2_aristotle"
     }
   ],
   "completed": []
